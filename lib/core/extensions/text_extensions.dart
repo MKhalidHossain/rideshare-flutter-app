@@ -67,6 +67,16 @@ extension TextStylingExtension on String {
     ),
   );
 
+  Text text20White() => Text(
+    this,
+    style: const TextStyle(
+      fontSize: 20,
+      fontFamily: _fontFamily,
+      fontWeight: FontWeight.w500,
+      color: Colors.white,
+    ),
+  );
+
   Text text20white() => Text(
     this,
     style: const TextStyle(
@@ -93,6 +103,17 @@ extension TextStylingExtension on String {
       fontFamily: _fontFamily,
       fontWeight: FontWeight.w400,
       color: Color(0xFF000000),
+    ),
+  );
+
+  Text text18White() => Text(
+    this,
+    textAlign: TextAlign.justify,
+    style: const TextStyle(
+      fontSize: 18,
+      fontFamily: _fontFamily,
+      fontWeight: FontWeight.w400,
+      color: Color(0xFFFFFFFF),
     ),
   );
 
