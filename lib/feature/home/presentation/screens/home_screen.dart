@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rideztohealth/core/extensions/text_extensions.dart';
-import 'package:rideztohealth/core/widgets/normal_custom_button.dart';
 import 'package:rideztohealth/feature/historyAndProfile/presentation/screens/history_screen.dart';
 import 'package:rideztohealth/feature/home/presentation/widgets/recent_single_contianer.dart';
+import 'package:rideztohealth/feature/map/presentation/screens/search_destination_screen.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/promo_banner_widget.dart';
 import '../../../historyAndProfile/presentation/screens/saved_places_screen.dart';
@@ -44,13 +44,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       const SizedBox(width: 8),
                       'Current location'.text18White500(),
-                      'New York City'.textColorWhite(10),
+                      'Dhaka City'.textColorWhite(10),
                     ],
                   ),
                 ],
               ),
 
               const SizedBox(height: 24),
+
               //  TextFormField(
               //             controller: _emailController,
               //             focusNode: _emailFocus,
@@ -91,17 +92,68 @@ class _HomeScreenState extends State<HomeScreen> {
               //             ),
               //             autofillHints: const [AutofillHints.email],
               //           ),
-              TextField(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white24,
-                  hintText: 'Enter Destination',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide.none,
+              GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (_) => DraggableScrollableSheet(
+                      initialChildSize: 0.85,
+                      maxChildSize: 0.85,
+                      minChildSize: 0.5,
+                      expand: false,
+                      builder: (_, controller) => Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xFF2C3E50),
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20),
+                          ),
+                        ),
+                        child: SearchDestinationScreen(
+                          scrollController: controller,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                child: AbsorbPointer(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white24,
+                      hintText: 'Enter Destination',
+                      hintStyle: const TextStyle(color: Colors.white54),
+                      prefixIcon: const Icon(Icons.search, color: Colors.white),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
                   ),
                 ),
               ),
+
+              // GestureDetector(
+              //   onTap: () {
+              //     Get.to(SearchDestinationScreen());
+              //   },
+              //   child: AbsorbPointer(
+              //     child: TextField(
+              //       decoration: InputDecoration(
+              //         filled: true,
+              //         fillColor: Colors.white24,
+              //         hintText: 'Enter Destination',
+              //         hintStyle: const TextStyle(color: Colors.white54),
+              //         prefixIcon: const Icon(Icons.search, color: Colors.white),
+              //         border: OutlineInputBorder(
+              //           borderRadius: BorderRadius.circular(8),
+              //           borderSide: BorderSide.none,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               const SizedBox(height: 16),
               _buildSectionTitle('Recent Trips'),
               // Column(
