@@ -6,6 +6,7 @@ class Urls {
 
 
     static const String socketUrl = 'http://10.10.5.85:5001'; 
+    // static const String socketUrl = 'https://ridetohealth-backend.onrender.com/api'; 
   // ------------------------ Authentication ------------------------
 
   static const String register = '/auth/register';
