@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 import 'package:rideztohealth/feature/home/domain/request_model/create_payment_response_model.dart';
 import 'package:rideztohealth/feature/home/domain/reponse_model/add_saved_place_response_model.dart';
 import 'package:rideztohealth/feature/home/domain/reponse_model/delete_saved_place_response_model.dart';
@@ -11,7 +9,6 @@ import 'package:rideztohealth/feature/home/domain/reponse_model/get_search_desti
 import 'package:rideztohealth/feature/home/presentation/screens/home_screen.dart';
 import 'package:rideztohealth/feature/payment/domain/create_payment_request_model.dart';
 import '../domain/request_model/ride_booking_info_request_model.dart';
-import '../../../core/constants/urls.dart';
 import '../domain/reponse_model/get_a_category_response_model.dart';
 import '../domain/reponse_model/get_recent_trips_response_model.dart';
 import '../domain/reponse_model/get_saved_places_response_model.dart';
@@ -43,7 +40,7 @@ class HomeController extends GetxController implements GetxService {
   GetSearchDestinationForFindNearestDriversResponseModel getSearchDestinationForFindNearestDriversResponseModel = 
       GetSearchDestinationForFindNearestDriversResponseModel();
 
-    CreatePaymentResponseModel? createPaymentResponseModel;
+  CreatePaymentResponseModel? createPaymentResponseModel;
   
   RequestRideResponseModel requestRideResponseModel = RequestRideResponseModel();
 
