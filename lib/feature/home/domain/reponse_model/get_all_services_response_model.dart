@@ -44,8 +44,9 @@ class ServiceData {
   final String? description;
   final int? baseFare;
   final String? serviceImage;
-  final int? perMileRate;
-  final int? perMinuteRate;
+  final num? perKmRate;
+  final num? perMileRate;
+  final num? perMinuteRate;
   final int? minimumFare;
   final int? cancellationFee;
   final int? capacity;
@@ -62,6 +63,7 @@ class ServiceData {
     this.description,
     this.baseFare,
     this.serviceImage,
+    this.perKmRate,
     this.perMileRate,
     this.perMinuteRate,
     this.minimumFare,
@@ -81,8 +83,11 @@ class ServiceData {
         description: json["description"],
         baseFare: json["baseFare"],
         serviceImage: json["serviceImage"],
-        perMileRate: json["perKmRate"],
-        perMinuteRate: json["perMinuteRate"],
+        perKmRate: json["perKmRate"] is num ? json["perKmRate"] as num : null,
+        perMileRate:
+            json["perMileRate"] is num ? json["perMileRate"] as num : null,
+        perMinuteRate:
+            json["perMinuteRate"] is num ? json["perMinuteRate"] as num : null,
         minimumFare: json["minimumFare"],
         cancellationFee: json["cancellationFee"],
         capacity: json["capacity"],
@@ -100,7 +105,8 @@ class ServiceData {
         "description": description,
         "baseFare": baseFare,
         "serviceImage": serviceImage,
-        "perKmRate": perMileRate,
+        "perKmRate": perKmRate,
+        "perMileRate": perMileRate,
         "perMinuteRate": perMinuteRate,
         "minimumFare": minimumFare,
         "cancellationFee": cancellationFee,
