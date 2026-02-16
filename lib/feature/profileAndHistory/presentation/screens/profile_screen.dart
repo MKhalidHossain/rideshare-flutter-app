@@ -4,6 +4,7 @@ import 'package:rideztohealth/core/extensions/text_extensions.dart';
 import 'package:rideztohealth/feature/auth/controllers/auth_controller.dart';
 import 'package:rideztohealth/feature/profileAndHistory/controllers/profile_and_history_controller.dart';
 import 'package:rideztohealth/feature/profileAndHistory/presentation/screens/account_security_screen.dart';
+import 'package:rideztohealth/feature/profileAndHistory/presentation/screens/delete_account_screen.dart';
 import 'package:rideztohealth/feature/profileAndHistory/presentation/screens/edit_profile_screen.dart';
 import 'package:rideztohealth/feature/profileAndHistory/presentation/screens/notifications_screen.dart';
 import 'package:rideztohealth/feature/profileAndHistory/presentation/screens/terms_and_condition.dart';
@@ -266,6 +267,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 _divider(),
                 _buildMenuItem(
+                  Icons.delete_outline,
+                  "Delete Account",
+                  "Request account deletion",
+                  color: const Color(0xffCE0000).withOpacity(0.8),
+                  onTap: () {
+                    Get.to(
+                      () => DeleteAccountScreen(
+                        prefilledEmail:
+                            controller.getProfileResponseModel.data?.email,
+                      ),
+                    );
+                  },
+                ),
+                _divider(),
+                _buildMenuItem(
                   Icons.logout,
                   "Log Out",
                   "Sign out of your account",
@@ -274,6 +290,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     await Get.find<AuthController>().logOut();
                   },
                 ),
+                
               ],
             ),
           ),

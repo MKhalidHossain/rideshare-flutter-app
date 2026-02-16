@@ -1,6 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rideztohealth/core/widgets/wide_custom_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/validation/validators.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../core/utils/constants/app_colors.dart';
@@ -19,6 +21,12 @@ class UserSignupScreenState extends State<UserSignupScreen> {
   bool value = false;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  static const String _privacyPolicyUrl =
+      'https://privacy.rideztransportation.com';
+  static const String _termsOfServiceUrl =
+      'https://privacy.rideztransportation.com/privacy.html';
+  late final TapGestureRecognizer _privacyPolicyRecognizer;
+  late final TapGestureRecognizer _termsOfServiceRecognizer;
 
   final FocusNode _nameFocus = FocusNode();
   final FocusNode _emailFocus = FocusNode();
@@ -40,6 +48,10 @@ class UserSignupScreenState extends State<UserSignupScreen> {
     _phoneController = TextEditingController();
     _passwordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
+    _privacyPolicyRecognizer = TapGestureRecognizer()
+      ..onTap = _openPrivacyPolicy;
+    _termsOfServiceRecognizer = TapGestureRecognizer()
+      ..onTap = _openTermsOfService;
     super.initState();
   }
 
@@ -50,7 +62,41 @@ class UserSignupScreenState extends State<UserSignupScreen> {
     _passwordController.dispose();
     _phoneController.dispose();
     _confirmPasswordController.dispose();
+    _privacyPolicyRecognizer.dispose();
+    _termsOfServiceRecognizer.dispose();
     super.dispose();
+  }
+
+  Future<void> _openPrivacyPolicy() async {
+    final uri = Uri.parse(_privacyPolicyUrl);
+    final launched = await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    );
+    if (!launched) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Unable to open privacy policy.'),
+        ),
+      );
+    }
+  }
+
+  Future<void> _openTermsOfService() async {
+    final uri = Uri.parse(_termsOfServiceUrl);
+    final launched = await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    );
+    if (!launched) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Unable to open terms of service.'),
+        ),
+      );
+    }
   }
 
   @override
@@ -183,16 +229,20 @@ class UserSignupScreenState extends State<UserSignupScreen> {
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                         ),
-                                        children: const [
+                                        children: [
                                           TextSpan(
                                             text: ' term of services ',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Colors.red,
                                               fontWeight: FontWeight.w700,
                                               fontSize: 16,
+                                              decoration:
+                                                  TextDecoration.underline,
                                             ),
+                                            recognizer:
+                                                _termsOfServiceRecognizer,
                                           ),
-                                          TextSpan(
+                                          const TextSpan(
                                             text: ' and ',
                                             style: TextStyle(
                                               color: Colors.white,
@@ -202,11 +252,15 @@ class UserSignupScreenState extends State<UserSignupScreen> {
                                           ),
                                           TextSpan(
                                             text: ' privacy policy. ',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: Colors.red,
                                               fontWeight: FontWeight.w700,
                                               fontSize: 16,
+                                              decoration:
+                                                  TextDecoration.underline,
                                             ),
+                                            recognizer:
+                                                _privacyPolicyRecognizer,
                                           ),
                                         ],
                                       ),
