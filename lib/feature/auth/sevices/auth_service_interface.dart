@@ -4,7 +4,7 @@ abstract class AuthServiceInterface {
   Future<dynamic> register(
     String fullName,
     String email,
-    String phoneNumber,
+    String? phoneNumber,
     String password,
     String role,
   );

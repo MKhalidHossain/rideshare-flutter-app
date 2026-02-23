@@ -90,7 +90,7 @@ class Validators {
   // Enhanced phone validation with international support
   static String? phone(String? value, {String? countryCode}) {
     if (value == null || value.trim().isEmpty) {
-      return 'Phone number is required';
+      return null;
     }
 
     // Remove all non-digit characters for validation

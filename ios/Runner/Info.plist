@@ -29,10 +29,12 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 
+	<!-- ✅ Replace with -->
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app needs location access even in the background.</string>
+	<string>RidezToHealth uses your location in the background to track your ride in real time and update your driver or passenger on your current position. For example, while you are being picked up, the app continuously shares your location so the driver can navigate to you accurately.</string>
+	<!-- ✅ Replace with -->
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs location access to show your position on the map.</string>
+	<string>RidezToHealth uses your location to show your current position on the map and help you find nearby rides or healthcare services. For example, when booking a ride, your location is used to set your pickup point automatically.</string>
 
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to your photo library to let you upload images (e.g., profile photo or documents) in the app.</string>
