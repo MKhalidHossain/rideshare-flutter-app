@@ -5,7 +5,7 @@ RidezToHealth is a Flutter mobile app built around ride and transportation workf
 ## Overview
 
 - App name: RidezToHealth
-- Platforms: iOS, Android, Web, Desktop (Flutter)
+- Platforms: iOS, Android (Flutter)
 - SDK: Flutter with Dart `^3.8.1`
 - Version: `1.0.1+1`
 - Architecture: Feature-first, GetX controllers + repositories + services
