@@ -6,6 +6,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rideztohealth/core/extensions/text_extensions.dart';
 import 'package:rideztohealth/core/widgets/shimmer/shimmer_skeleton.dart';
 import 'package:rideztohealth/core/widgets/wide_custom_button.dart';
+import 'package:rideztohealth/feature/auth/controllers/auth_controller.dart';
+import 'package:rideztohealth/feature/auth/presentation/screens/user_login_screen.dart';
 import 'package:rideztohealth/feature/home/controllers/home_controller.dart';
 import 'package:rideztohealth/feature/home/domain/reponse_model/get_search_destination_for_find_Nearest_drivers_response_model.dart';
 import 'package:rideztohealth/feature/home/domain/request_model/ride_booking_info_request_model.dart';
@@ -43,6 +45,7 @@ class ConfirmYourLocationScreen extends StatelessWidget {
   final HomeController homeController = Get.find<HomeController>();
 
   final AppController appController = Get.find<AppController>();
+  final AuthController authController = Get.find<AuthController>();
 
   double _calculateEstimatedPriceValue(
     double distanceKm, {
@@ -99,6 +102,12 @@ class ConfirmYourLocationScreen extends StatelessWidget {
   }
 
   Future<void> _handleConfirmLocation() async {
+    if (!authController.isLoggedIn()) {
+      appController.showErrorSnackbar('Please sign in to book a ride');
+      Get.to(() => const UserLoginScreen());
+      return;
+    }
+
     final driverData = selectedDriver;
     final pickupLatLng =
         locationController.pickupLocation.value ?? locationController.currentLocation.value;

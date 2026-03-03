@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rideztohealth/core/extensions/text_extensions.dart';
 import 'package:rideztohealth/core/utils/date_time_formatter.dart';
+import 'package:rideztohealth/feature/auth/controllers/auth_controller.dart';
+import 'package:rideztohealth/feature/auth/presentation/screens/user_login_screen.dart';
 import 'package:rideztohealth/feature/home/controllers/home_controller.dart';
 import 'package:rideztohealth/feature/profileAndHistory/presentation/screens/history_screen.dart';
 import 'package:rideztohealth/feature/home/presentation/widgets/recent_single_contianer.dart';
@@ -28,13 +30,16 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> savedPlaces = ["Mom's House", "Airport"];
 
   HomeController homeController = Get.find<HomeController>();
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   void initState() {
-    homeController.getAllServices();
-    homeController.getSavedPlaces();
-    homeController.getRecentTrips();
     super.initState();
+    homeController.getAllServices();
+    if (authController.isLoggedIn()) {
+      homeController.getSavedPlaces();
+      homeController.getRecentTrips();
+    }
   }
 
   @override
@@ -42,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = MediaQuery.of(context).size;
     return GetBuilder<HomeController>(
       builder: (homeController) {
+        final isLoggedIn = authController.isLoggedIn();
         final name = homeController
             .getAllCategoryResponseModel
             .data
@@ -189,61 +195,66 @@ class _HomeScreenState extends State<HomeScreen> {
                         // ),
                         const SizedBox(height: 16),
                         _buildSectionTitle('Recent Trips'),
-                        // Column(
-                        //   children: recentTrips
-                        //       .map((trip) => _buildTripTile(trip))
-                        //       .toList(),
-                        // ),
                         const SizedBox(height: 16),
-
-                        ObxValue(
-
-                          (data){
-                            final recentTrips =homeController.getRecentTripsResponseModel.value.data?.rides ?? [];
-                            return
-                          ( recentTrips).isEmpty
-                              ? Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 40,
-                                    ),
-                                    child: 'You have not taken any trips yet.'
-                                        .text16White500(),
-                                  ),
-                                )
-                              : ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: recentTrips.length > 2
-                                      ? 2
-                                      : recentTrips.length, // ✅ max 2 items,
-                                  itemBuilder: (context, index) {
-                                    final trip = recentTrips[index];
-                                    return Column(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.to(HistoryScreen());
-                                          },
-                                          child: SingleActivityORTripContainer(
-                                            title:
-                                                trip.dropoffLocation?.address ??
-                                                'Unknown Location',
-                                            subTitle: DateTimeFormatter.format(
-                                              trip.createdAt ?? '',
-                                            ),
-                                            price:
-                                                "\$ ${trip.finalFare.toString()} USD",
-                                          ),
+                        if (!isLoggedIn)
+                          _buildLoginPrompt(
+                            'Sign in to view your recent trips.',
+                          )
+                        else
+                          ObxValue(
+                            (data) {
+                              final recentTrips = homeController
+                                      .getRecentTripsResponseModel
+                                      .value
+                                      .data
+                                      ?.rides ??
+                                  [];
+                              return (recentTrips).isEmpty
+                                  ? Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 40,
                                         ),
-                                        const SizedBox(height: 16),
-                                      ],
+                                        child: 'You have not taken any trips yet.'
+                                            .text16White500(),
+                                      ),
+                                    )
+                                  : ListView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: recentTrips.length > 2
+                                          ? 2
+                                          : recentTrips.length, // ✅ max 2 items,
+                                      itemBuilder: (context, index) {
+                                        final trip = recentTrips[index];
+                                        return Column(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.to(HistoryScreen());
+                                              },
+                                              child:
+                                                  SingleActivityORTripContainer(
+                                                title: trip.dropoffLocation
+                                                        ?.address ??
+                                                    'Unknown Location',
+                                                subTitle:
+                                                    DateTimeFormatter.format(
+                                                  trip.createdAt ?? '',
+                                                ),
+                                                price:
+                                                    "\$ ${trip.finalFare.toString()} USD",
+                                              ),
+                                            ),
+                                            const SizedBox(height: 16),
+                                          ],
+                                        );
+                                      },
                                     );
-                                  },
-                                );
-                                },
-                                homeController.getRecentTripsResponseModel
-                        ),
+                            },
+                            homeController.getRecentTripsResponseModel,
+                          ),
 
                         // GestureDetector(
                         //   onTap: () {
@@ -273,6 +284,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             _buildSectionTitle('Saved Places'),
                             TextButton(
                               onPressed: () {
+                                if (!isLoggedIn) {
+                                  Get.to(() => const UserLoginScreen());
+                                  return;
+                                }
                                 Get.to(SavedPlaceScreen());
                               },
                               child: 'See All'.textColorWhite(14),
@@ -289,43 +304,49 @@ class _HomeScreenState extends State<HomeScreen> {
                         // Saved Places
                         const SizedBox(height: 16),
 
-                        savedPlaces.isEmpty
-                            ? Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 40,
+                        if (!isLoggedIn)
+                          _buildLoginPrompt(
+                            'Sign in to manage your saved places.',
+                          )
+                        else
+                          savedPlaces.isEmpty
+                              ? Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 40,
+                                    ),
+                                    child: 'No saved places yet.'
+                                        .text16White500(),
                                   ),
-                                  child: 'No saved places yet.'
-                                      .text16White500(),
-                                ),
-                              )
-                            : ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: savedPlaces.length > 2
-                                    ? 2
-                                    : savedPlaces.length, // ✅ max 2,
-                                itemBuilder: (context, index) {
-                                  final place = savedPlaces[index];
-                                  return Column(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.to(SavedPlaceScreen());
-                                        },
-                                        child: SavedPlaceSingeContainer(
-                                          title: place.name ?? 'Unknown',
-                                          subTitle:
-                                              place.address ?? 'No Address',
-                                          isShowDeleteButton: false,
-                                          placeId: place.id.toString(),
+                                )
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  physics:
+                                      const NeverScrollableScrollPhysics(),
+                                  itemCount: savedPlaces.length > 2
+                                      ? 2
+                                      : savedPlaces.length, // ✅ max 2,
+                                  itemBuilder: (context, index) {
+                                    final place = savedPlaces[index];
+                                    return Column(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.to(SavedPlaceScreen());
+                                          },
+                                          child: SavedPlaceSingeContainer(
+                                            title: place.name ?? 'Unknown',
+                                            subTitle:
+                                                place.address ?? 'No Address',
+                                            isShowDeleteButton: false,
+                                            placeId: place.id.toString(),
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 16),
-                                    ],
-                                  );
-                                },
-                              ),
+                                        const SizedBox(height: 16),
+                                      ],
+                                    );
+                                  },
+                                ),
                         // GestureDetector(
                         //   onTap: () {
                         //     Get.to(SavedPlaceScreen());
@@ -589,6 +610,26 @@ class _HomeScreenState extends State<HomeScreen> {
   //     ],
   //   ),
   // );
+
+  Widget _buildLoginPrompt(String message) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24),
+        child: Column(
+          children: [
+            message.text16White500(),
+            const SizedBox(height: 12),
+            TextButton(
+              onPressed: () {
+                Get.to(() => const UserLoginScreen());
+              },
+              child: 'Sign in'.textColorWhite(14),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _buildHomeShimmer(BuildContext context) {
     return Scaffold(
