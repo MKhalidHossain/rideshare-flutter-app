@@ -21,10 +21,7 @@ class AuthRepository implements AuthRepositoryInterface {
 
   @override
   Future changePassword(ChangePasswordRequestModel requestModel) async {
-    return await apiClient.postData(
-      Urls.changePassword,
-      requestModel.toJson(),
-    );
+    return await apiClient.postData(Urls.changePassword, requestModel.toJson());
   }
 
   @override
@@ -41,7 +38,7 @@ class AuthRepository implements AuthRepositoryInterface {
   @override
   String getUserToken() {
     final token = sharedPreferences.getString(AppConstants.accessToken) ?? '';
-     apiClient.updateHeader(token);
+    apiClient.updateHeader(token);
     return token;
   }
 
@@ -103,17 +100,22 @@ class AuthRepository implements AuthRepositoryInterface {
   Future register(
     String fullName,
     String email,
-    String phoneNumber,
+    String? phoneNumber,
     String password,
     String role,
   ) async {
-    return await apiClient.postData(Urls.register, {
+    final requestBody = {
       'fullName': fullName,
       'email': email,
-      'phoneNumber': phoneNumber,
       'password': password,
       'role': role,
-    });
+    };
+
+    if (phoneNumber != null && phoneNumber.trim().isNotEmpty) {
+      requestBody['phoneNumber'] = phoneNumber.trim();
+    }
+
+    return await apiClient.postData(Urls.register, requestBody);
   }
 
   @override
@@ -155,8 +157,8 @@ class AuthRepository implements AuthRepositoryInterface {
     return accessSaved && refreshSaved;
   }
 
-    @override
-  Future<bool?> saveUserId(String userId) async{
+  @override
+  Future<bool?> saveUserId(String userId) async {
     return await sharedPreferences.setString(AppConstants.userId, userId);
   }
 
@@ -186,8 +188,4 @@ class AuthRepository implements AuthRepositoryInterface {
       'type': type,
     });
   }
-  
-
-  
-
 }

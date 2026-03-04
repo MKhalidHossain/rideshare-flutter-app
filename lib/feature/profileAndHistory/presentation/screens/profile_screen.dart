@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rideztohealth/core/extensions/text_extensions.dart';
 import 'package:rideztohealth/feature/auth/controllers/auth_controller.dart';
+import 'package:rideztohealth/feature/auth/presentation/screens/user_login_screen.dart';
 import 'package:rideztohealth/feature/profileAndHistory/controllers/profile_and_history_controller.dart';
 import 'package:rideztohealth/feature/profileAndHistory/presentation/screens/account_security_screen.dart';
 import 'package:rideztohealth/feature/profileAndHistory/presentation/screens/delete_account_screen.dart';
@@ -9,6 +10,7 @@ import 'package:rideztohealth/feature/profileAndHistory/presentation/screens/edi
 import 'package:rideztohealth/feature/profileAndHistory/presentation/screens/notifications_screen.dart';
 import 'package:rideztohealth/feature/profileAndHistory/presentation/screens/terms_and_condition.dart';
 import 'package:rideztohealth/core/widgets/shimmer/shimmer_skeleton.dart';
+import 'package:rideztohealth/core/widgets/wide_custom_button.dart';
 import '../../../../core/constants/app_colors.dart';
 import 'privacy_policy_screen.dart';
 
@@ -23,12 +25,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
-    profileController.getProfile();
     super.initState();
+    if (authController.isLoggedIn()) {
+      profileController.getProfile();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!authController.isLoggedIn()) {
+      return SafeArea(
+        child: _buildGuestProfile(context),
+      );
+    }
     return SafeArea(
       child: GetBuilder<ProfileAndHistoryController>(
         builder: (controller) {
@@ -296,6 +305,104 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildGuestProfile(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: 'My Profile'.text20white(),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: Colors.white10,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    height: 80,
+                    width: 80,
+                    padding: const EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [
+                          const Color(0xffCE0000).withOpacity(0.8),
+                          const Color(0xff7B0100).withOpacity(0.8),
+                        ],
+                      ),
+                    ),
+                    child: const ClipOval(
+                      child: Center(
+                        child: Icon(
+                          Icons.person_outline,
+                          size: 30,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Text(
+                      'Guest User',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontFamily: 'outfit',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView(
+                children: [
+                  WideCustomButton(
+                    text: 'Log In / Create Account',
+                    onPressed: () {
+                      Get.to(() => const UserLoginScreen());
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  _buildMenuItem(
+                    Icons.help_outline,
+                    "Terms & Conditions",
+                    "Terms & Services",
+                    onTap: () {
+                      Get.to(() => TermsAndCondition());
+                    },
+                  ),
+                  _divider(),
+                  _buildMenuItem(
+                    Icons.shield_outlined,
+                    "Privacy Policy",
+                    "Privacy policy",
+                    onTap: () {
+                      Get.to(PrivacyPolicyScreen());
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

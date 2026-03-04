@@ -9,4 +9,5 @@ abstract class HistoryAndProfileRepositoryInterface {
   Future<Response> getNotifications({int page = 1, int limit = 20});
   Future<Response> updateLocation(String latitude, String longitude, String address);
   Future<Response> updateUserProfile(UpdateProfileRequestModel requestModel);
+  Future<Response> deleteAccount(String emailOrPhone);
 }

@@ -32,7 +32,7 @@ class AuthService implements AuthServiceInterface {
     return authRepositoryInterface.getUserToken();
   }
 
-    @override
+  @override
   String getUserId() {
     return authRepositoryInterface.getUserId();
   }
@@ -66,7 +66,7 @@ class AuthService implements AuthServiceInterface {
   Future register(
     String fullName,
     String email,
-    String phoneNumber,
+    String? phoneNumber,
     String password,
     String role,
   ) async {
@@ -94,12 +94,15 @@ class AuthService implements AuthServiceInterface {
 
   @override
   Future<bool?> saveUserToken(String accessToken, String refreshToken) async {
-    return await authRepositoryInterface.saveUserToken(accessToken, refreshToken);
+    return await authRepositoryInterface.saveUserToken(
+      accessToken,
+      refreshToken,
+    );
   }
 
-    @override
-  Future<bool?> saveUserId(String userId) async{
-   return await authRepositoryInterface.saveUserId(userId);
+  @override
+  Future<bool?> saveUserId(String userId) async {
+    return await authRepositoryInterface.saveUserId(userId);
   }
 
   @override
@@ -121,8 +124,4 @@ class AuthService implements AuthServiceInterface {
   Future verifyOtp(String email, String otp, String type) async {
     return await authRepositoryInterface.verifyOtp(email, otp, type);
   }
-  
-
-  
-
 }

@@ -69,6 +69,8 @@ class AuthController extends GetxController implements GetxService {
 
   RegistrationResponseModel? registrationResponseModel;
   LogInResponseModel? logInResponseModel;
+  static const int _maxLoginAttempts = 3;
+  int _loginFailCount = 0;
   ChangePasswordResponseModel? changePasswordResponseModel;
   RequestPasswordResetResponseModel? requestPasswordResetResponseModel;
   ResetPasswordWithOtpResponseModel? resetPasswordWithOtpResponseModel;
@@ -124,58 +126,73 @@ class AuthController extends GetxController implements GetxService {
     String otpVerifyType,
     String fullName,
     String email,
-    String phoneNumber,
+    String? phoneNumber,
     String password,
     String role,
   ) async {
+    if (_isLoading) {
+      return;
+    }
+
+    final String normalizedFullName = fullName.trim();
+    final String normalizedEmail = email.trim().toLowerCase();
+    final String normalizedPassword = password.trim();
+    final String normalizedRole = role.trim();
+    final String? normalizedPhoneNumber = phoneNumber?.trim();
+
     _isLoading = true;
     update();
 
     print(
-      "REGISTER API BODY: {fullNmae: $fullName, email: $email, password: $password, role: $role}",
+      "REGISTER API BODY: {fullName: $normalizedFullName, email: $normalizedEmail, password: $normalizedPassword, role: $normalizedRole}",
     );
 
     try {
       Response? response = await authServiceInterface.register(
-        fullName,
-        email,
-        phoneNumber,
-        password,
-        role,
+        normalizedFullName,
+        normalizedEmail,
+        normalizedPhoneNumber,
+        normalizedPassword,
+        normalizedRole,
       );
       if (response!.statusCode == 201) {
         registrationResponseModel = RegistrationResponseModel.fromJson(
           response.body,
         );
 
-        print(
-          "REGISTER API BODY: {fullNmae: $fullName, email: $email, password: $password, role: $role}",
-        );
-        print('\nemail: $email , otpVerifyType: $otpVerifyType\n');
-        _isLoading = false;
-        update();
+        print('\nemail: $normalizedEmail , otpVerifyType: $otpVerifyType\n');
         Get.off(
-          () => VerifyOtpScreen(email: email, otpVerifyType: otpVerifyType),
+          () => VerifyOtpScreen(
+            email: normalizedEmail,
+            otpVerifyType: otpVerifyType,
+          ),
         );
 
         showCustomSnackBar(
           response.body['message'] ??
               'Registration success Now need to email verification',
         );
-        showCustomSnackBar('please check your email to verify your account');
+        showCustomSnackBar('Please check your email to verify your account');
         // Get.off(() => UserLoginScreen());
         // showCustomSnackBar('Welcome you have successfully Registered');
       } else {
-        _isLoading = false;
+        final String apiMessage = _extractResponseMessage(response.body);
+        final bool isDuplicateEntry = apiMessage.toLowerCase().contains(
+          'duplicate',
+        );
+
         if (response.statusCode == 400) {
           showCustomSnackBar(
-            response.body['message'] ?? 'Something went wrong',
+            isDuplicateEntry
+                ? 'An account with this email or phone already exists. Please sign in or use different information.'
+                : (apiMessage.isNotEmpty ? apiMessage : 'Something went wrong'),
             isError: true,
           );
         } else {
           showCustomSnackBar(
-            response.body['message'] ??
-                'Registration failed. Please try again.',
+            apiMessage.isNotEmpty
+                ? apiMessage
+                : 'Registration failed. Please try again.',
             isError: true,
           );
         }
@@ -184,15 +201,23 @@ class AuthController extends GetxController implements GetxService {
           ' ❌ Registration failed: ${response.statusCode} ${response.body} ',
         );
       }
-      update();
     } catch (e) {
-      _isLoading = false;
       print("❌ Error during registration: $e");
       showCustomSnackBar(
         "Something went wrong. Please try again later.",
         isError: true,
       );
+    } finally {
+      _isLoading = false;
+      update();
     }
+  }
+
+  String _extractResponseMessage(dynamic body) {
+    if (body is Map && body['message'] != null) {
+      return body['message'].toString();
+    }
+    return '';
   }
 
   Future<void> login(String emailOrPhone, String password) async {
@@ -208,9 +233,22 @@ class AuthController extends GetxController implements GetxService {
 
     if (response == null) {
       print("No response found");
+      _loginFailCount++;
+      if (_loginFailCount >= _maxLoginAttempts) {
+        _loginFailCount = 0;
+        _isLoading = false;
+        update();
+        Get.offAll(UserSignupScreen());
+        showCustomSnackBar(
+          'Too many failed attempts. Please create an account.',
+        );
+        return;
+      }
+      _isLoading = false;
+      update();
+      return;
     }
-    if (response!.statusCode == 200) {
-      Map map = response.body;
+    if (response.statusCode == 200) {
       String accessToken = '';
       String refreshToken = '';
       String userId = '';
@@ -230,51 +268,55 @@ class AuthController extends GetxController implements GetxService {
         'User Token $accessToken  ================================== from comtroller ',
       );
       await setUserId(userId);
-      await setUserToken(accessToken, refreshToken).then((_)async{
-        // await Future.delayed(Duration(seconds: 3), 
+      await setUserToken(accessToken, refreshToken).then((_) async {
+        // await Future.delayed(Duration(seconds: 3),
         // );
-          socketClient.emit('join-user', {
-          'userId': userId,  // ei key ta backend expect korche
-            });
-            print('socket join with sender id To chekkkkkkkikk: ${userId}');
-          Get.offAll(() => AppMain());
+        socketClient.emit('join-user', {
+          'userId': userId, // ei key ta backend expect korche
+        });
+        print('socket join with sender id To chekkkkkkkikk: ${userId}');
+        Get.offAll(() => AppMain());
       });
-
-
 
       //Get.offAll(BottomNavbar());
 
       showCustomSnackBar('Welcome you have successfully Logged In');
 
+      _loginFailCount = 0;
       _isLoading = false;
-    } else if (response.statusCode == 202) {
-      if (response.body['data']['is_phone_verified'] == 0) {}
-    } else if (response.statusCode == 400) {
-      Get.offAll(UserSignupScreen());
-      showCustomSnackBar('Sorry you have no account, please create a account');
-    }
-    else if (response.statusCode == 401) {
-      Get.offAll(UserSignupScreen());
-      showCustomSnackBar(
-  'Login Failed',
-  subMessage: 'The email or password you entered is incorrect. Please try again.',
-);
-
-    }
-    
-     else {
-      _isLoading = false;
-      ApiChecker.checkApi(response);
+    } else {
+      _loginFailCount++;
+      if (_loginFailCount >= _maxLoginAttempts) {
+        _loginFailCount = 0;
+        _isLoading = false;
+        update();
+        Get.offAll(UserSignupScreen());
+        showCustomSnackBar(
+          'Too many failed attempts. Please create an account.',
+        );
+        return;
+      }
+      if (response.statusCode == 202) {
+        if (response.body['data']['is_phone_verified'] == 0) {}
+      } else if (response.statusCode == 400) {
+        showCustomSnackBar(
+          'Sorry you have no account, please create a account',
+        );
+      } else if (response.statusCode == 401) {
+        showCustomSnackBar(
+          'Login Failed',
+          subMessage:
+              'The email or password you entered is incorrect. Please try again.',
+        );
+      } else {
+        ApiChecker.checkApi(response);
+      }
     }
 
     _isLoading = false;
     update();
   }
 
-  
-  
-  
-  
   Future<void> logOut() async {
     logging = true;
     update();
@@ -298,8 +340,6 @@ class AuthController extends GetxController implements GetxService {
           backgroundColor: Colors.red,
         );
         Get.offAll(() => UserLoginScreen());
-
-
       }
     } else {
       print(response.toString() + ' from controller');
@@ -479,9 +519,7 @@ class AuthController extends GetxController implements GetxService {
     update();
   }
 
-  Future<void> changePassword(
-    ChangePasswordRequestModel requestModel,
-  ) async {
+  Future<void> changePassword(ChangePasswordRequestModel requestModel) async {
     changePasswordIsLoading = true;
     update();
 
@@ -496,8 +534,9 @@ class AuthController extends GetxController implements GetxService {
           isError: true,
         );
       } else {
-        changePasswordResponseModel =
-            ChangePasswordResponseModel.fromJson(response.body);
+        changePasswordResponseModel = ChangePasswordResponseModel.fromJson(
+          response.body,
+        );
 
         if (response.statusCode == 200 &&
             (changePasswordResponseModel?.success ?? false)) {
@@ -598,7 +637,7 @@ class AuthController extends GetxController implements GetxService {
     await authServiceInterface.saveUserToken(accessToken, refreshToken);
   }
 
-    Future<void> setUserId(String userId) async {
+  Future<void> setUserId(String userId) async {
     await authServiceInterface.saveUserId(userId);
   }
 

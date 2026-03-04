@@ -69,32 +69,22 @@ class UserSignupScreenState extends State<UserSignupScreen> {
 
   Future<void> _openPrivacyPolicy() async {
     final uri = Uri.parse(_privacyPolicyUrl);
-    final launched = await launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-    );
+    final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
     if (!launched) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Unable to open privacy policy.'),
-        ),
+        const SnackBar(content: Text('Unable to open privacy policy.')),
       );
     }
   }
 
   Future<void> _openTermsOfService() async {
     final uri = Uri.parse(_termsOfServiceUrl);
-    final launched = await launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-    );
+    final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
     if (!launched) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Unable to open terms of service.'),
-        ),
+        const SnackBar(content: Text('Unable to open terms of service.')),
       );
     }
   }
@@ -117,9 +107,7 @@ class UserSignupScreenState extends State<UserSignupScreen> {
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.0),
                       child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight: size.height,
-                        ),
+                        constraints: BoxConstraints(minHeight: size.height),
                         child: IntrinsicHeight(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -132,9 +120,7 @@ class UserSignupScreenState extends State<UserSignupScreen> {
                                   style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.w500,
-                                    color: AppColors.context(
-                                      context,
-                                    ).textColor,
+                                    color: AppColors.context(context).textColor,
                                   ),
                                 ),
                               ),
@@ -165,7 +151,7 @@ class UserSignupScreenState extends State<UserSignupScreen> {
                               _buildCustomTextField(
                                 title: 'Phone Number',
                                 context: context,
-                                label: 'Enter your Phone Number',
+                                label: 'Enter your Phone Number (Optional)',
                                 controller: _phoneController,
                                 icon: Icons.phone_outlined,
                                 focusNode: _phoneFocus,
@@ -274,12 +260,14 @@ class UserSignupScreenState extends State<UserSignupScreen> {
                                 text: 'Sign Up',
                                 isLoading: authController.isLoading,
                                 onPressed: () {
+                                  final phoneNumber = _phoneController.text
+                                      .trim();
                                   authController.register(
                                     otpVerifyType,
-                                    _nameController.text,
-                                    _emailController.text,
-                                    _phoneController.text,
-                                    _passwordController.text,
+                                    _nameController.text.trim(),
+                                    _emailController.text.trim().toLowerCase(),
+                                    phoneNumber.isEmpty ? null : phoneNumber,
+                                    _passwordController.text.trim(),
                                     userRole,
                                   );
                                 },
@@ -287,12 +275,9 @@ class UserSignupScreenState extends State<UserSignupScreen> {
 
                               const SizedBox(height: 16),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                  bottom: 16,
-                                ),
+                                padding: const EdgeInsets.only(bottom: 16),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       "Already have an account? ",
@@ -325,9 +310,7 @@ class UserSignupScreenState extends State<UserSignupScreen> {
                               const SizedBox(height: 16),
 
                               Padding(
-                                padding: const EdgeInsets.only(
-                                  bottom: 16,
-                                ),
+                                padding: const EdgeInsets.only(bottom: 16),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -366,17 +349,17 @@ class UserSignupScreenState extends State<UserSignupScreen> {
                               ),
                               const SizedBox(height: 50),
                               const SizedBox(height: 16),
-                                  ],
-                                ),
-                              ),
-                            ),
+                            ],
                           ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              );
+              ],
+            ),
+          ),
+        );
       },
     );
   }
