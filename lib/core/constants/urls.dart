@@ -20,6 +20,7 @@ class Urls {
   static const String resetPasswordWithOtp = '/auth/reset-password';
   static const String changePassword = '/auth/change-password';
   static const String logOut = '/auth/logout';
+  static const String deleteAccount = '/auth/delete-account';
   // ------------------------ User Management ------------------------
   static const String getProfile = '/user/profile';
   static const String updateProfile = '/user/profile';

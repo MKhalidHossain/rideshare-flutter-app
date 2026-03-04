@@ -58,4 +58,11 @@ class HistoryAndProfileService implements HistoryAndProfileServiceInterface {
       requestModel,
     );
   }
+
+  @override
+  Future<Response> deleteAccount(String emailOrPhone) async {
+    return await historyAndProfileRepositoryInterface.deleteAccount(
+      emailOrPhone,
+    );
+  }
 }

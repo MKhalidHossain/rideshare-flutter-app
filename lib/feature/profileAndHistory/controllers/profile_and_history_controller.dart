@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rideztohealth/feature/profileAndHistory/domain/model/get_profile_response_model.dart';
 import 'package:rideztohealth/feature/profileAndHistory/domain/model/update_location_response_model.dart';
@@ -27,6 +28,7 @@ class ProfileAndHistoryController extends GetxController implements GetxService 
 
   bool isLoading = false;
   bool notificationsLoading = false;
+  bool deleteAccountLoading = false;
 
   Future<void> getProfile() async {
     try {
@@ -220,6 +222,27 @@ class ProfileAndHistoryController extends GetxController implements GetxService 
       print("⚠️ Error updating profile : updateUserProfile : $e\n");
     } finally {
       isLoading = false;
+      update();
+    }
+  }
+
+  Future<Response?> deleteAccount(String emailOrPhone) async {
+    try {
+      deleteAccountLoading = true;
+      update();
+
+      final response =
+          await historyAndProfileServiceInterface.deleteAccount(emailOrPhone);
+
+      debugPrint("Delete Account Status : ${response.statusCode}");
+      debugPrint("Delete Account Body : ${response.body}");
+
+      return response;
+    } catch (e) {
+      print("⚠️ Error deleting account : $e\n");
+      return null;
+    } finally {
+      deleteAccountLoading = false;
       update();
     }
   }
