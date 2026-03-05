@@ -77,6 +77,57 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
     );
   }
 
+  Future<void> _showDeleteConfirmation() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF2C3E50),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          title: const Text(
+            'Delete Account',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            'Are you sure you want to delete your account? This action cannot be undone.',
+            style: TextStyle(color: Colors.grey),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: const Text(
+                'No',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFB10706),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: const Text(
+                'Yes, Delete',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed == true) {
+      await _submitDeleteRequest();
+    } else if (confirmed == false) {
+      Get.back();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final cardColor = Colors.white.withOpacity(0.05);
@@ -240,7 +291,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                               width: double.infinity,
                               child: ElevatedButton(
                                 onPressed:
-                                    isSubmitting ? null : _submitDeleteRequest,
+                                    isSubmitting ? null : _showDeleteConfirmation,
                                 style: ElevatedButton.styleFrom(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 14),
