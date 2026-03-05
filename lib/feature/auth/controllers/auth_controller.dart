@@ -69,6 +69,8 @@ class AuthController extends GetxController implements GetxService {
 
   RegistrationResponseModel? registrationResponseModel;
   LogInResponseModel? logInResponseModel;
+  static const int _maxLoginAttempts = 3;
+  int _loginFailCount = 0;
   ChangePasswordResponseModel? changePasswordResponseModel;
   RequestPasswordResetResponseModel? requestPasswordResetResponseModel;
   ResetPasswordWithOtpResponseModel? resetPasswordWithOtpResponseModel;
@@ -231,9 +233,22 @@ class AuthController extends GetxController implements GetxService {
 
     if (response == null) {
       print("No response found");
+      _loginFailCount++;
+      if (_loginFailCount >= _maxLoginAttempts) {
+        _loginFailCount = 0;
+        _isLoading = false;
+        update();
+        Get.offAll(UserSignupScreen());
+        showCustomSnackBar(
+          'Too many failed attempts. Please create an account.',
+        );
+        return;
+      }
+      _isLoading = false;
+      update();
+      return;
     }
-    if (response!.statusCode == 200) {
-      Map map = response.body;
+    if (response.statusCode == 200) {
       String accessToken = '';
       String refreshToken = '';
       String userId = '';
@@ -267,7 +282,9 @@ class AuthController extends GetxController implements GetxService {
 
       showCustomSnackBar('Welcome you have successfully Logged In');
 
+      _loginFailCount = 0;
       _isLoading = false;
+<<<<<<< HEAD
     } else if (response.statusCode == 202) {
       if (response.body['data']['is_phone_verified'] == 0) {}
     } else if (response.statusCode == 400) {
@@ -283,6 +300,35 @@ class AuthController extends GetxController implements GetxService {
     } else {
       _isLoading = false;
       ApiChecker.checkApi(response);
+=======
+    } else {
+      _loginFailCount++;
+      if (_loginFailCount >= _maxLoginAttempts) {
+        _loginFailCount = 0;
+        _isLoading = false;
+        update();
+        Get.offAll(UserSignupScreen());
+        showCustomSnackBar(
+          'Too many failed attempts. Please create an account.',
+        );
+        return;
+      }
+      if (response.statusCode == 202) {
+        if (response.body['data']['is_phone_verified'] == 0) {}
+      } else if (response.statusCode == 400) {
+        showCustomSnackBar(
+          'Sorry you have no account, please create a account',
+        );
+      } else if (response.statusCode == 401) {
+        showCustomSnackBar(
+          'Login Failed',
+          subMessage:
+              'The email or password you entered is incorrect. Please try again.',
+        );
+      } else {
+        ApiChecker.checkApi(response);
+      }
+>>>>>>> 0fb519b7496d711f5d72b0f698bb905c55920f7e
     }
 
     _isLoading = false;

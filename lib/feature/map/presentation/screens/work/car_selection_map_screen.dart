@@ -136,6 +136,12 @@ class _CarSelectionMapScreenState extends State<CarSelectionMapScreen> {
     // 2. React to changes in currentLocation
   }
 
+  @override
+  void dispose() {
+    locationController.clearMapController();
+    super.dispose();
+  }
+
   void getCarData() async {
     final current = locationController.currentLocation.value;
     if (current != null) {

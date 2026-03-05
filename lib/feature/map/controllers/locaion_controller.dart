@@ -299,6 +299,10 @@ Future<void> _initCustomMarkers() async {
     }
   }
 
+  void clearMapController() {
+    mapController.value = null;
+  }
+
   void updateMapMarkers() {
     markers.clear();
 
@@ -1008,5 +1012,4 @@ Future<void> _initCustomMarkers() async {
 //     return distanceInMeters / 1000;
 //   }
 // }
-
 

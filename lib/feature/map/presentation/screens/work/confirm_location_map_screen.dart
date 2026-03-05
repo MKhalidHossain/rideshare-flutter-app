@@ -6,6 +6,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rideztohealth/core/extensions/text_extensions.dart';
 import 'package:rideztohealth/core/widgets/shimmer/shimmer_skeleton.dart';
 import 'package:rideztohealth/core/widgets/wide_custom_button.dart';
+import 'package:rideztohealth/feature/auth/controllers/auth_controller.dart';
+import 'package:rideztohealth/feature/auth/presentation/screens/user_login_screen.dart';
 import 'package:rideztohealth/feature/home/controllers/home_controller.dart';
 import 'package:rideztohealth/feature/home/domain/reponse_model/get_search_destination_for_find_Nearest_drivers_response_model.dart';
 import 'package:rideztohealth/feature/home/domain/request_model/ride_booking_info_request_model.dart';
@@ -43,6 +45,7 @@ class ConfirmYourLocationScreen extends StatelessWidget {
   final HomeController homeController = Get.find<HomeController>();
 
   final AppController appController = Get.find<AppController>();
+  final AuthController authController = Get.find<AuthController>();
 
   double _calculateEstimatedPriceValue(
     double distanceKm, {
@@ -99,6 +102,94 @@ class ConfirmYourLocationScreen extends StatelessWidget {
   }
 
   Future<void> _handleConfirmLocation() async {
+    if (!authController.isLoggedIn()) {
+      final shouldLogin = await Get.dialog<bool>(
+        AlertDialog(
+          backgroundColor: const Color(0xFF303644),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          title: const Text('Sign in required'),
+          content: const Text(
+            'You need to sign in to confirm your location and book a ride.',
+          ),
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+          contentTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+          ),
+          actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          actions: [
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 44,
+                    child: InkWell(
+                      onTap: () => Get.back(result: false),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'No',
+                            style: TextStyle(
+                              color: Color(0xFF303644),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: SizedBox(
+                    height: 44,
+                    child: InkWell(
+                      onTap: () => Get.back(result: true),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          gradient: LinearGradient(
+                            stops: [0.0, 0.4, 9.0],
+                            colors: [
+                              Color(0xff7B0100).withOpacity(0.8),
+                              Color(0xFFCE0000),
+                              Color(0xff7B0100).withOpacity(0.8),
+                            ],
+                          ),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Yes',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        barrierDismissible: true,
+      );
+      if (shouldLogin == true) {
+        Get.to(() => const UserLoginScreen());
+      }
+      return;
+    }
+
     final driverData = selectedDriver;
     final pickupLatLng =
         locationController.pickupLocation.value ?? locationController.currentLocation.value;

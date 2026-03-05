@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:image_picker/image_picker.dart';
@@ -78,5 +79,20 @@ class HistoryAndProfileRepository
       Urls.updateProfile,
       requestModel.toJson(),
     );
+  }
+
+  @override
+  Future<Response> deleteAccount(String emailOrPhone) async {
+    final request = http.Request(
+      'DELETE',
+      Uri.parse(Urls.baseUrl + Urls.deleteAccount),
+    );
+    request.headers.addAll(apiClient.getHeader());
+    request.body = jsonEncode({'emailOrPhone': emailOrPhone});
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    return apiClient.handleResponse(response, Urls.deleteAccount);
   }
 }

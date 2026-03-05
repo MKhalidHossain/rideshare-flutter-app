@@ -13,4 +13,5 @@ abstract class HistoryAndProfileServiceInterface {
     String address,
   );
   Future<Response> updateUserProfile(UpdateProfileRequestModel requestModel);
+  Future<Response> deleteAccount(String emailOrPhone);
 }
