@@ -32,6 +32,27 @@ class _HomeScreenState extends State<HomeScreen> {
   HomeController homeController = Get.find<HomeController>();
   final AuthController authController = Get.find<AuthController>();
 
+  void _openRideBookingFlow() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => DraggableScrollableSheet(
+        initialChildSize: 0.85,
+        maxChildSize: 0.85,
+        minChildSize: 0.5,
+        expand: false,
+        builder: (_, controller) => Container(
+          decoration: const BoxDecoration(
+            color: Color(0xFF303644),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: SearchDestinationScreen(scrollController: controller),
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -48,15 +69,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return GetBuilder<HomeController>(
       builder: (homeController) {
         final isLoggedIn = authController.isLoggedIn();
-        final name = homeController
-            .getAllCategoryResponseModel
-            .data
-            ?.first
-            .name;
+        final name =
+            homeController.getAllCategoryResponseModel.data?.first.name;
         print("Nmae form category: $name");
         final savedPlaces =
             homeController.getSavedPlacesResponseModel.data ?? [];
-      
+
         return homeController.isLoading
             ? _buildHomeShimmer(context)
             : Scaffold(
@@ -145,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   child: SearchDestinationScreen(
-                                     scrollController: controller,
+                                    scrollController: controller,
                                   ),
                                 ),
                               ),
@@ -201,60 +219,59 @@ class _HomeScreenState extends State<HomeScreen> {
                             'Sign in to view your recent trips.',
                           )
                         else
-                          ObxValue(
-                            (data) {
-                              final recentTrips = homeController
-                                      .getRecentTripsResponseModel
-                                      .value
-                                      .data
-                                      ?.rides ??
-                                  [];
-                              return (recentTrips).isEmpty
-                                  ? Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 40,
-                                        ),
-                                        child: 'You have not taken any trips yet.'
-                                            .text16White500(),
+                          ObxValue((data) {
+                            final recentTrips =
+                                homeController
+                                    .getRecentTripsResponseModel
+                                    .value
+                                    .data
+                                    ?.rides ??
+                                [];
+                            return (recentTrips).isEmpty
+                                ? Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 40,
                                       ),
-                                    )
-                                  : ListView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount: recentTrips.length > 2
-                                          ? 2
-                                          : recentTrips.length, // ✅ max 2 items,
-                                      itemBuilder: (context, index) {
-                                        final trip = recentTrips[index];
-                                        return Column(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Get.to(HistoryScreen());
-                                              },
-                                              child:
-                                                  SingleActivityORTripContainer(
-                                                title: trip.dropoffLocation
-                                                        ?.address ??
-                                                    'Unknown Location',
-                                                subTitle:
-                                                    DateTimeFormatter.format(
-                                                  trip.createdAt ?? '',
-                                                ),
-                                                price:
-                                                    "\$ ${trip.finalFare.toString()} USD",
-                                              ),
+                                      child: 'You have not taken any trips yet.'
+                                          .text16White500(),
+                                    ),
+                                  )
+                                : ListView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: recentTrips.length > 2
+                                        ? 2
+                                        : recentTrips.length, // ✅ max 2 items,
+                                    itemBuilder: (context, index) {
+                                      final trip = recentTrips[index];
+                                      return Column(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.to(HistoryScreen());
+                                            },
+                                            child: SingleActivityORTripContainer(
+                                              title:
+                                                  trip
+                                                      .dropoffLocation
+                                                      ?.address ??
+                                                  'Unknown Location',
+                                              subTitle:
+                                                  DateTimeFormatter.format(
+                                                    trip.createdAt ?? '',
+                                                  ),
+                                              price:
+                                                  "\$ ${trip.finalFare.toString()} USD",
                                             ),
-                                            const SizedBox(height: 16),
-                                          ],
-                                        );
-                                      },
-                                    );
-                            },
-                            homeController.getRecentTripsResponseModel,
-                          ),
+                                          ),
+                                          const SizedBox(height: 16),
+                                        ],
+                                      );
+                                    },
+                                  );
+                          }, homeController.getRecentTripsResponseModel),
 
                         // GestureDetector(
                         //   onTap: () {
@@ -321,8 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 )
                               : ListView.builder(
                                   shrinkWrap: true,
-                                  physics:
-                                      const NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   itemCount: savedPlaces.length > 2
                                       ? 2
                                       : savedPlaces.length, // ✅ max 2,
@@ -335,9 +351,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             Get.to(SavedPlaceScreen());
                                           },
                                           child: SavedPlaceSingeContainer(
-                                            title: place.name ?? 'Unknown',
-                                            subTitle:
-                                                place.address ?? 'No Address',
+                                            title: place.name,
+                                            subTitle: place.address,
                                             isShowDeleteButton: false,
                                             placeId: place.id.toString(),
                                           ),
@@ -424,8 +439,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             children:
                                 (homeController
                                             .getAllCategoryResponseModel
-                                            .data
-                                            ??
+                                            .data ??
                                         [])
                                     .map((Services) {
                                       return Padding(
@@ -455,11 +469,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         const SizedBox(height: 24),
                         PromoBannerWidget(
-                          title: 'Enjoy 18% off next ride',
+                          title: 'Book your next ride',
                           buttonText: 'Book Now',
-                          onPressed: () {
-                            // Your action
-                          },
+                          onPressed: _openRideBookingFlow,
                           imagePath: 'assets/images/promoImage.png',
                         ),
 
@@ -481,27 +493,6 @@ class _HomeScreenState extends State<HomeScreen> {
       color: Colors.white,
       fontFamily: 'Poppins',
     ),
-  );
-
-  Widget _buildTripTile(String trip) {
-    return ListTile(
-      leading: Icon(Icons.access_time, color: Colors.grey),
-      title: Text(trip),
-      trailing: TextButton(
-        onPressed: () {
-          setState(() {
-            recentTrips.remove(trip);
-          });
-        },
-        child: const Text('Remove', style: TextStyle(color: Colors.red)),
-      ),
-    );
-  }
-
-  Widget _buildSavedTile(String place) => ListTile(
-    leading: Icon(Icons.place_outlined, color: Colors.grey),
-    title: Text(place),
-    subtitle: const Text('Search terminal'),
   );
 
   Widget _buildServiceCard(
@@ -529,11 +520,7 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           image.trim().isEmpty
-              ? const Icon(
-                  Icons.broken_image,
-                  size: 40,
-                  color: Colors.grey,
-                )
+              ? const Icon(Icons.broken_image, size: 40, color: Colors.grey)
               : Image.network(
                   image,
                   fit: BoxFit.contain,
