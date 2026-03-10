@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rideztohealth/core/extensions/text_extensions.dart';
-import 'package:rideztohealth/feature/auth/presentation/screens/user_login_screen.dart';
+import 'package:rideztohealth/app.dart';
 import '../../../common/button/rounded_button_with_arrow_and_progress.dart';
 import '../../../widgets/app_scaffold.dart';
 
@@ -35,7 +35,7 @@ class Onboarding3 extends StatelessWidget {
             isIcon: false,
             percent: 100,
             onTap: () {
-              Get.to(() => const UserLoginScreen());
+              Get.offAll(() => const AppMain());
             },
           ),
         ],

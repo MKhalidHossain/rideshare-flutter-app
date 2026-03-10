@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rideztohealth/core/extensions/text_extensions.dart';
 import 'package:rideztohealth/core/utils/date_time_formatter.dart';
+import 'package:rideztohealth/feature/auth/controllers/auth_controller.dart';
+import 'package:rideztohealth/feature/auth/presentation/screens/user_login_screen.dart';
 import 'package:rideztohealth/feature/home/controllers/home_controller.dart';
 import 'package:rideztohealth/feature/profileAndHistory/presentation/screens/history_screen.dart';
 import 'package:rideztohealth/feature/home/presentation/widgets/recent_single_contianer.dart';
@@ -28,13 +30,37 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> savedPlaces = ["Mom's House", "Airport"];
 
   HomeController homeController = Get.find<HomeController>();
+  final AuthController authController = Get.find<AuthController>();
+
+  void _openRideBookingFlow() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => DraggableScrollableSheet(
+        initialChildSize: 0.85,
+        maxChildSize: 0.85,
+        minChildSize: 0.5,
+        expand: false,
+        builder: (_, controller) => Container(
+          decoration: const BoxDecoration(
+            color: Color(0xFF303644),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: SearchDestinationScreen(scrollController: controller),
+        ),
+      ),
+    );
+  }
 
   @override
   void initState() {
-    homeController.getAllServices();
-    homeController.getSavedPlaces();
-    homeController.getRecentTrips();
     super.initState();
+    homeController.getAllServices();
+    if (authController.isLoggedIn()) {
+      homeController.getSavedPlaces();
+      homeController.getRecentTrips();
+    }
   }
 
   @override
@@ -42,15 +68,13 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = MediaQuery.of(context).size;
     return GetBuilder<HomeController>(
       builder: (homeController) {
-        final name = homeController
-            .getAllCategoryResponseModel
-            .data
-            ?.first
-            .name;
+        final isLoggedIn = authController.isLoggedIn();
+        final name =
+            homeController.getAllCategoryResponseModel.data?.first.name;
         print("Nmae form category: $name");
         final savedPlaces =
             homeController.getSavedPlacesResponseModel.data ?? [];
-      
+
         return homeController.isLoading
             ? _buildHomeShimmer(context)
             : Scaffold(
@@ -139,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   child: SearchDestinationScreen(
-                                     scrollController: controller,
+                                    scrollController: controller,
                                   ),
                                 ),
                               ),
@@ -189,61 +213,65 @@ class _HomeScreenState extends State<HomeScreen> {
                         // ),
                         const SizedBox(height: 16),
                         _buildSectionTitle('Recent Trips'),
-                        // Column(
-                        //   children: recentTrips
-                        //       .map((trip) => _buildTripTile(trip))
-                        //       .toList(),
-                        // ),
                         const SizedBox(height: 16),
-
-                        ObxValue(
-
-                          (data){
-                            final recentTrips =homeController.getRecentTripsResponseModel.value.data?.rides ?? [];
-                            return
-                          ( recentTrips).isEmpty
-                              ? Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 40,
+                        if (!isLoggedIn)
+                          _buildLoginPrompt(
+                            'Sign in to view your recent trips.',
+                          )
+                        else
+                          ObxValue((data) {
+                            final recentTrips =
+                                homeController
+                                    .getRecentTripsResponseModel
+                                    .value
+                                    .data
+                                    ?.rides ??
+                                [];
+                            return (recentTrips).isEmpty
+                                ? Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 40,
+                                      ),
+                                      child: 'You have not taken any trips yet.'
+                                          .text16White500(),
                                     ),
-                                    child: 'You have not taken any trips yet.'
-                                        .text16White500(),
-                                  ),
-                                )
-                              : ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: recentTrips.length > 2
-                                      ? 2
-                                      : recentTrips.length, // ✅ max 2 items,
-                                  itemBuilder: (context, index) {
-                                    final trip = recentTrips[index];
-                                    return Column(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.to(HistoryScreen());
-                                          },
-                                          child: SingleActivityORTripContainer(
-                                            title:
-                                                trip.dropoffLocation?.address ??
-                                                'Unknown Location',
-                                            subTitle: DateTimeFormatter.format(
-                                              trip.createdAt ?? '',
+                                  )
+                                : ListView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: recentTrips.length > 2
+                                        ? 2
+                                        : recentTrips.length, // ✅ max 2 items,
+                                    itemBuilder: (context, index) {
+                                      final trip = recentTrips[index];
+                                      return Column(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.to(HistoryScreen());
+                                            },
+                                            child: SingleActivityORTripContainer(
+                                              title:
+                                                  trip
+                                                      .dropoffLocation
+                                                      ?.address ??
+                                                  'Unknown Location',
+                                              subTitle:
+                                                  DateTimeFormatter.format(
+                                                    trip.createdAt ?? '',
+                                                  ),
+                                              price:
+                                                  "\$ ${trip.finalFare.toString()} USD",
                                             ),
-                                            price:
-                                                "\$ ${trip.finalFare.toString()} USD",
                                           ),
-                                        ),
-                                        const SizedBox(height: 16),
-                                      ],
-                                    );
-                                  },
-                                );
-                                },
-                                homeController.getRecentTripsResponseModel
-                        ),
+                                          const SizedBox(height: 16),
+                                        ],
+                                      );
+                                    },
+                                  );
+                          }, homeController.getRecentTripsResponseModel),
 
                         // GestureDetector(
                         //   onTap: () {
@@ -273,6 +301,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             _buildSectionTitle('Saved Places'),
                             TextButton(
                               onPressed: () {
+                                if (!isLoggedIn) {
+                                  Get.to(() => const UserLoginScreen());
+                                  return;
+                                }
                                 Get.to(SavedPlaceScreen());
                               },
                               child: 'See All'.textColorWhite(14),
@@ -289,43 +321,47 @@ class _HomeScreenState extends State<HomeScreen> {
                         // Saved Places
                         const SizedBox(height: 16),
 
-                        savedPlaces.isEmpty
-                            ? Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 40,
+                        if (!isLoggedIn)
+                          _buildLoginPrompt(
+                            'Sign in to manage your saved places.',
+                          )
+                        else
+                          savedPlaces.isEmpty
+                              ? Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 40,
+                                    ),
+                                    child: 'No saved places yet.'
+                                        .text16White500(),
                                   ),
-                                  child: 'No saved places yet.'
-                                      .text16White500(),
-                                ),
-                              )
-                            : ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: savedPlaces.length > 2
-                                    ? 2
-                                    : savedPlaces.length, // ✅ max 2,
-                                itemBuilder: (context, index) {
-                                  final place = savedPlaces[index];
-                                  return Column(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.to(SavedPlaceScreen());
-                                        },
-                                        child: SavedPlaceSingeContainer(
-                                          title: place.name ?? 'Unknown',
-                                          subTitle:
-                                              place.address ?? 'No Address',
-                                          isShowDeleteButton: false,
-                                          placeId: place.id.toString(),
+                                )
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: savedPlaces.length > 2
+                                      ? 2
+                                      : savedPlaces.length, // ✅ max 2,
+                                  itemBuilder: (context, index) {
+                                    final place = savedPlaces[index];
+                                    return Column(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.to(SavedPlaceScreen());
+                                          },
+                                          child: SavedPlaceSingeContainer(
+                                            title: place.name,
+                                            subTitle: place.address,
+                                            isShowDeleteButton: false,
+                                            placeId: place.id.toString(),
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 16),
-                                    ],
-                                  );
-                                },
-                              ),
+                                        const SizedBox(height: 16),
+                                      ],
+                                    );
+                                  },
+                                ),
                         // GestureDetector(
                         //   onTap: () {
                         //     Get.to(SavedPlaceScreen());
@@ -403,8 +439,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             children:
                                 (homeController
                                             .getAllCategoryResponseModel
-                                            .data
-                                            ??
+                                            .data ??
                                         [])
                                     .map((Services) {
                                       return Padding(
@@ -434,11 +469,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         const SizedBox(height: 24),
                         PromoBannerWidget(
-                          title: 'Enjoy 18% off next ride',
+                          title: 'Book your next ride',
                           buttonText: 'Book Now',
-                          onPressed: () {
-                            // Your action
-                          },
+                          onPressed: _openRideBookingFlow,
                           imagePath: 'assets/images/promoImage.png',
                         ),
 
@@ -460,27 +493,6 @@ class _HomeScreenState extends State<HomeScreen> {
       color: Colors.white,
       fontFamily: 'Poppins',
     ),
-  );
-
-  Widget _buildTripTile(String trip) {
-    return ListTile(
-      leading: Icon(Icons.access_time, color: Colors.grey),
-      title: Text(trip),
-      trailing: TextButton(
-        onPressed: () {
-          setState(() {
-            recentTrips.remove(trip);
-          });
-        },
-        child: const Text('Remove', style: TextStyle(color: Colors.red)),
-      ),
-    );
-  }
-
-  Widget _buildSavedTile(String place) => ListTile(
-    leading: Icon(Icons.place_outlined, color: Colors.grey),
-    title: Text(place),
-    subtitle: const Text('Search terminal'),
   );
 
   Widget _buildServiceCard(
@@ -508,11 +520,7 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           image.trim().isEmpty
-              ? const Icon(
-                  Icons.broken_image,
-                  size: 40,
-                  color: Colors.grey,
-                )
+              ? const Icon(Icons.broken_image, size: 40, color: Colors.grey)
               : Image.network(
                   image,
                   fit: BoxFit.contain,
@@ -589,6 +597,26 @@ class _HomeScreenState extends State<HomeScreen> {
   //     ],
   //   ),
   // );
+
+  Widget _buildLoginPrompt(String message) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24),
+        child: Column(
+          children: [
+            message.text16White500(),
+            const SizedBox(height: 12),
+            TextButton(
+              onPressed: () {
+                Get.to(() => const UserLoginScreen());
+              },
+              child: 'Sign in'.textColorWhite(14),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _buildHomeShimmer(BuildContext context) {
     return Scaffold(

@@ -2,51 +2,89 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+
 	<key>CFBundleDisplayName</key>
 	<string>RidezToHealth</string>
+
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+
 	<key>CFBundleName</key>
 	<string>RidezToHealth</string>
+
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
+
 	<key>CFBundleSignature</key>
 	<string>????</string>
+
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 
-	<!-- ✅ Replace with -->
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>RidezToHealth uses your location in the background to track your ride in real time and update your driver or passenger on your current position. For example, while you are being picked up, the app continuously shares your location so the driver can navigate to you accurately.</string>
-	<!-- ✅ Replace with -->
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>RidezToHealth uses your location to show your current position on the map and help you find nearby rides or healthcare services. For example, when booking a ride, your location is used to set your pickup point automatically.</string>
-
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We need access to your photo library to let you upload images (e.g., profile photo or documents) in the app.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>We need camera access to let you take photos for upload.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>We need permission to save images to your photo library.</string>
-
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>RidezToHealth uses your location in the background to track your ride in real time and keep your driver or passenger updated on your current position. For example, while you are being picked up, the app continuously shares your location so the driver can navigate to you accurately.</string>
+
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>RidezToHealth uses your location to show your position on the map and help you find nearby rides or healthcare transportation services. For example, when booking a ride your location is used to set your pickup point automatically.</string>
+
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>RidezToHealth requires continuous background location access so drivers can navigate to you and riders can track trip progress in real time, even when the app is in the background.</string>
+
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+
+	<key>NSCameraUsageDescription</key>
+	<string>RidezToHealth needs camera access so you can take a photo for your profile picture or upload required documents such as a driver's licence or insurance card.</string>
+
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>RidezToHealth needs access to your photo library so you can choose an existing photo for your profile or upload documents required for your account.</string>
+
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>RidezToHealth needs permission to save trip receipts or images to your photo library.</string>
+
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+	</dict>
+
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
+
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 
@@ -64,5 +102,6 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+
 </dict>
 </plist>

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:rideztohealth/core/extensions/text_extensions.dart';
+import 'package:rideztohealth/feature/auth/controllers/auth_controller.dart';
+import 'package:rideztohealth/feature/auth/presentation/screens/user_login_screen.dart';
 import 'package:rideztohealth/feature/home/controllers/home_controller.dart';
 import 'package:rideztohealth/core/widgets/shimmer/shimmer_skeleton.dart';
+import 'package:rideztohealth/core/widgets/wide_custom_button.dart';
 
 import '../../../../core/utils/date_time_formatter.dart';
 import '../../../home/presentation/widgets/recent_single_contianer.dart';
@@ -11,10 +13,13 @@ import '../../../home/presentation/widgets/recent_single_contianer.dart';
 class HistoryScreen extends StatelessWidget {
   HistoryScreen({super.key});
 
-  HomeController homeController = Get.find<HomeController>();
+  AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
+    if (!authController.isLoggedIn()) {
+      return _buildGuestContent(context);
+    }
     return GetBuilder<HomeController>(
       builder: (homeController) {
         final recentTrips =
@@ -136,6 +141,68 @@ class HistoryScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildGuestContent(BuildContext context) {
+    return SafeArea(
+      bottom: false,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: false,
+          title: 'Your Activity'.text22White(),
+          backgroundColor: Colors.transparent,
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: 88,
+                  width: 88,
+                  decoration: BoxDecoration(
+                    color: Colors.white12,
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: const Icon(
+                    Icons.history,
+                    size: 40,
+                    color: Colors.white70,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'You are using Guest Mode',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Log in to see your ride history and activity.',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                WideCustomButton(
+                  text: 'Log In',
+                  onPressed: () {
+                    Get.to(() => const UserLoginScreen());
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

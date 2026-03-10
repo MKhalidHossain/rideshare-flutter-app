@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rideztohealth/app.dart';
-import 'package:rideztohealth/feature/auth/controllers/auth_controller.dart';
-import 'package:rideztohealth/feature/auth/presentation/screens/user_login_screen.dart';
 import 'package:rideztohealth/helpers/dependency_injection.dart';
-import 'core/onboarding/presentation/screens/constantSpashScreen.dart';
-import 'core/onboarding/presentation/screens/onboarding1.dart';
-import 'core/onboarding/presentation/screens/spashScreen.dart';
 import 'feature/map/bindings/initial_binding.dart';
 // I think that we need to check isLoggedIn  , is work or not
 
@@ -29,40 +24,9 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final AuthController authController = Get.find<AuthController>();
-  Future<bool>? _isFirstTimeInstaled;
-  @override
-  void initState() {
-    super.initState();
-    _isFirstTimeInstaled = authController.isFirstTimeInstall();
-  }
-
-  // isFirstTimeInstall() async {
-  //   isFirstTimeInstaled = await authController.isFirstTimeInstall();
-  //   print("form mainScreen isFirstTimeInstaled $isFirstTimeInstaled");
-  //   return isFirstTimeInstaled;
-  // }
-
-
-  whichPageToNext(bool _isFirstTimeInstaled) {
-    if (_isFirstTimeInstaled) {
-      return SplashScreen(nextScreen: Onboarding1());
-    } else if (authController.isLoggedIn()) {
-      return AppMain();
-    } else {
-      return UserLoginScreen();
-    }
-  }
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -79,16 +43,7 @@ class _MyAppState extends State<MyApp> {
       // initialBinding: InitialBinding(),
       initialBinding: InitialBinding(),
       debugShowCheckedModeBanner: false,
-      home: FutureBuilder<bool>(
-        future: _isFirstTimeInstaled,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return ConstantSplashScreen();
-          } else {
-            return whichPageToNext(snapshot.data!);
-          }
-        },
-      ),
+      home: const AppMain(),
 
       // whichPageToNext(),
       //MapScreenTest(),
@@ -99,4 +54,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-

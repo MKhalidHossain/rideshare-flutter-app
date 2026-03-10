@@ -4,9 +4,6 @@ import 'package:rideztohealth/core/widgets/shimmer/shimmer_skeleton.dart';
 import '../../themes/app_color.dart';
 import '../../themes/text_style.dart';
 
-
-
-
 extension ButtonStyleExtensions on BuildContext {
   Widget primaryButton({
     required VoidCallback onPressed,
@@ -56,22 +53,29 @@ extension ButtonStyleExtensions on BuildContext {
 }
 
 class SecondaryButton extends StatelessWidget {
-  const SecondaryButton({super.key, required Null Function() onPressed});
+  const SecondaryButton({
+    super.key,
+    required this.onPressed,
+    this.label = 'Message Local',
+  });
+
+  final VoidCallback onPressed;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: OutlinedButton.styleFrom(
         foregroundColor: AppColors.primaryColor,
         side: BorderSide(color: AppColors.primaryColor),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
-      child: const Center(
+      child: Center(
         child: Text(
-          'Message Local',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          label,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
       ),
     );

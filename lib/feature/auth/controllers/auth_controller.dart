@@ -69,6 +69,8 @@ class AuthController extends GetxController implements GetxService {
 
   RegistrationResponseModel? registrationResponseModel;
   LogInResponseModel? logInResponseModel;
+  static const int _maxLoginAttempts = 3;
+  int _loginFailCount = 0;
   ChangePasswordResponseModel? changePasswordResponseModel;
   RequestPasswordResetResponseModel? requestPasswordResetResponseModel;
   ResetPasswordWithOtpResponseModel? resetPasswordWithOtpResponseModel;
@@ -231,9 +233,22 @@ class AuthController extends GetxController implements GetxService {
 
     if (response == null) {
       print("No response found");
+      _loginFailCount++;
+      if (_loginFailCount >= _maxLoginAttempts) {
+        _loginFailCount = 0;
+        _isLoading = false;
+        update();
+        Get.offAll(UserSignupScreen());
+        showCustomSnackBar(
+          'Too many failed attempts. Please create an account.',
+        );
+        return;
+      }
+      _isLoading = false;
+      update();
+      return;
     }
-    if (response!.statusCode == 200) {
-      Map map = response.body;
+    if (response.statusCode == 200) {
       String accessToken = '';
       String refreshToken = '';
       String userId = '';
@@ -267,22 +282,35 @@ class AuthController extends GetxController implements GetxService {
 
       showCustomSnackBar('Welcome you have successfully Logged In');
 
+      _loginFailCount = 0;
       _isLoading = false;
-    } else if (response.statusCode == 202) {
-      if (response.body['data']['is_phone_verified'] == 0) {}
-    } else if (response.statusCode == 400) {
-      Get.offAll(UserSignupScreen());
-      showCustomSnackBar('Sorry you have no account, please create a account');
-    } else if (response.statusCode == 401) {
-      Get.offAll(UserSignupScreen());
-      showCustomSnackBar(
-        'Login Failed',
-        subMessage:
-            'The email or password you entered is incorrect. Please try again.',
-      );
     } else {
-      _isLoading = false;
-      ApiChecker.checkApi(response);
+      _loginFailCount++;
+      if (_loginFailCount >= _maxLoginAttempts) {
+        _loginFailCount = 0;
+        _isLoading = false;
+        update();
+        Get.offAll(UserSignupScreen());
+        showCustomSnackBar(
+          'Too many failed attempts. Please create an account.',
+        );
+        return;
+      }
+      if (response.statusCode == 202) {
+        if (response.body['data']['is_phone_verified'] == 0) {}
+      } else if (response.statusCode == 400) {
+        showCustomSnackBar(
+          'Sorry you have no account, please create a account',
+        );
+      } else if (response.statusCode == 401) {
+        showCustomSnackBar(
+          'Login Failed',
+          subMessage:
+              'The email or password you entered is incorrect. Please try again.',
+        );
+      } else {
+        ApiChecker.checkApi(response);
+      }
     }
 
     _isLoading = false;
