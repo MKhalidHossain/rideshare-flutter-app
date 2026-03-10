@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rideztohealth/core/widgets/shimmer/shimmer_skeleton.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:rideztohealth/core/extensions/text_extensions.dart';
 import 'package:rideztohealth/feature/auth/controllers/auth_controller.dart';
 import 'package:rideztohealth/feature/auth/presentation/screens/user_login_screen.dart';
 import 'package:rideztohealth/feature/home/controllers/home_controller.dart';
@@ -61,7 +60,7 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
   bool _isSavingRide = false;
 
   // Bottom sheet height control
-  static const double _sheetHeightFactor = 0.7; // default 60%; tweak as needed
+  static const double _sheetHeightFactor = 0.7;
   static const List<String> _savedPlaceTypes = ['Home', 'Work', 'Favorite'];
 
   void _onProfileSelected(String profileType) {
@@ -324,12 +323,16 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
     required String imagePath,
   }) {
     final isSelected = _selectedPaymentType == type;
+    const contentScale = 0.9;
 
     return GestureDetector(
       onTap: () => _onProfileSelected(type),
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8),
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        margin: EdgeInsets.symmetric(vertical: 8 * contentScale),
+        padding: EdgeInsets.symmetric(
+          vertical: 8 * contentScale,
+          horizontal: 16 * contentScale,
+        ),
         decoration: BoxDecoration(
           color: isSelected
               ? AppColors.context(context).primaryColor.withValues(alpha: 0.08)
@@ -345,7 +348,7 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16 * contentScale),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: isSelected
@@ -365,16 +368,18 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                     type,
                     style: TextStyle(
                       color: isSelected ? Colors.white : Colors.grey,
-                      fontSize: 16,
+                      fontSize: 16 * contentScale,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4 * contentScale),
                   Text(
                     description,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: Colors.white60,
-                      fontSize: 14,
+                      fontSize: 14 * contentScale,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -450,6 +455,27 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    const contentScale = 0.9;
+    final horizontalPadding = 20.0 * contentScale;
+    final topPadding = 10.0 * contentScale;
+    final sectionGap = 16.0 * contentScale;
+    final largeGap = 20.0 * contentScale;
+    final avatarRadius = 30.0 * contentScale;
+    final vehicleImageWidth = 80.0 * contentScale;
+    final actionButtonHeight = 51.0 * contentScale;
+    final actionButtonFontSize = 18.0 * contentScale;
+    final actionIconSize = 32.0 * contentScale;
+    final saveButtonHeight = 36.0 * contentScale;
+    final saveButtonWidth = 100.0 * contentScale;
+    final saveButtonFontSize = 13.0 * contentScale;
+    final titleFontSize = 15.0 * contentScale;
+    final driverNameFontSize = 18.0 * contentScale;
+    final secondaryIconSize = 16.0 * contentScale;
+    final ratingFontSize = 14.0 * contentScale;
+    final detailFontSize = 12.0 * contentScale;
+    final priceFontSize = 16.0 * contentScale;
+    final strikePriceFontSize = 12.0 * contentScale;
+    final floatingButtonSize = 50.0;
     final originalPriceValue = _calculateOriginalPriceValue();
     final discountedPriceValue = _calculatePriceValue();
     final responsePriceValue = double.tryParse(
@@ -502,7 +528,7 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
             child: GestureDetector(
               onTap: () => Get.back(),
               child: Container(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
@@ -529,8 +555,8 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                 }
               },
               child: Container(
-                width: 50,
-                height: 50,
+                width: floatingButtonSize,
+                height: floatingButtonSize,
                 decoration: BoxDecoration(
                   color: Colors.red,
                   shape: BoxShape.circle,
@@ -546,14 +572,12 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
             left: 0,
             right: 0,
             child: Container(
-              height:
-                  MediaQuery.of(context).size.height *
-                  _sheetHeightFactor, // change factor to adjust default height
+              height: size.height * _sheetHeightFactor,
               padding: EdgeInsets.only(
-                top: 10,
-                left: 20,
-                right: 20,
-                bottom: MediaQuery.of(context).padding.bottom + 10,
+                top: topPadding,
+                left: horizontalPadding,
+                right: horizontalPadding,
+                bottom: MediaQuery.of(context).padding.bottom + topPadding,
               ),
               decoration: BoxDecoration(
                 color: const Color(0xFF303644),
@@ -564,42 +588,54 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
               ),
               child: SafeArea(
                 child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   child: Obx(
                     () => Column(
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             IconButton(
-                              icon: Icon(Icons.arrow_back, color: Colors.white),
+                              constraints: const BoxConstraints(),
+                              padding: EdgeInsets.zero,
+                              icon: const Icon(
+                                Icons.arrow_back,
+                                color: Colors.white,
+                              ),
                               onPressed: () => Get.back(),
                             ),
-                            Text(
-                              'Your driver is coming  ...',
-
-                              //in ${widget.selectedDriver?.service?.estimatedArrivalTime ?? 3} min',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                'Your driver is coming...',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: titleFontSize,
+                                ),
                               ),
                             ),
-
+                            const SizedBox(width: 10),
                             NormalCustomButton(
                               text: _isSavingRide ? "Saving..." : "Save Ride",
-                              weight: 100,
+                              height: saveButtonHeight,
+                              weight: saveButtonWidth,
+                              fontSize: saveButtonFontSize,
                               onPressed: _handleSaveRide,
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: largeGap),
                         Divider(color: Colors.grey[700], thickness: 0.5),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 15),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 8 * contentScale,
+                          ),
                           child: Row(
                             children: [
                               CircleAvatar(
-                                radius: 30,
+                                radius: avatarRadius,
                                 backgroundImage: widget.selectedDriver == null
                                     ? const AssetImage(
                                         'assets/images/user6.png',
@@ -615,15 +651,15 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                                                     ?.fullName ??
                                                 'U')[0]
                                             .toUpperCase(),
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 18,
+                                          fontSize: 18 * contentScale,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       )
                                     : null,
                               ),
-                              SizedBox(width: 15),
+                              SizedBox(width: 12 * contentScale),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -637,44 +673,66 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                                           'Max Johnson',
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 18,
+                                        fontSize: driverNameFontSize,
                                         fontWeight: FontWeight.bold,
                                       ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    SizedBox(height: 8),
+                                    SizedBox(height: 8 * contentScale),
                                     Row(
                                       children: [
                                         Icon(
                                           Icons.location_on_outlined,
                                           color: Colors.white,
-                                          size: 16,
+                                          size: secondaryIconSize,
                                         ),
-                                        "${locationController.distance.value.toStringAsFixed(1)} Miles"
-                                            .text12White(),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          "${locationController.distance.value.toStringAsFixed(1)} Miles",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: detailFontSize,
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
                                       ],
                                     ),
-                                    SizedBox(height: 4),
+                                    SizedBox(height: 4 * contentScale),
                                     Row(
                                       children: [
                                         Icon(
                                           Icons.star,
                                           color: Colors.amber,
-                                          size: 16,
+                                          size: secondaryIconSize,
                                         ),
-                                        SizedBox(width: 5),
-                                        (widget.selectedDriver != null
-                                                ? widget
-                                                      .selectedDriver!
-                                                      .driver
-                                                      .ratings
-                                                      .average
-                                                      .toStringAsFixed(1)
-                                                : "4.9")
-                                            .text14White(),
-                                        " ("
-                                                "${widget.selectedDriver?.driver.ratings.totalRatings ?? 127}"
-                                                ")"
-                                            .text12Grey(),
+                                        SizedBox(width: 5 * contentScale),
+                                        Text(
+                                          widget.selectedDriver != null
+                                              ? widget
+                                                    .selectedDriver!
+                                                    .driver
+                                                    .ratings
+                                                    .average
+                                                    .toStringAsFixed(1)
+                                              : "4.9",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: ratingFontSize,
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Text(
+                                          " (${widget.selectedDriver?.driver.ratings.totalRatings ?? 127})",
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: detailFontSize,
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ],
@@ -689,24 +747,24 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                                           .selectedDriver!
                                           .service!
                                           .serviceImage!,
-                                      width: 80,
+                                      width: vehicleImageWidth,
                                       fit: BoxFit.contain,
                                       errorBuilder: (_, __, ___) => Image.asset(
                                         'assets/images/privet_car.png',
-                                        width: 80,
+                                        width: vehicleImageWidth,
                                         fit: BoxFit.contain,
                                       ),
                                     )
                                   : Image.asset(
                                       'assets/images/privet_car.png',
-                                      width: 80,
+                                      width: vehicleImageWidth,
                                       fit: BoxFit.contain,
                                     ),
                             ],
                           ),
                         ),
                         Divider(color: Colors.grey[700], thickness: 0.5),
-                        SizedBox(height: 20),
+                        SizedBox(height: largeGap),
                         _buildProfileOption(
                           type: "Cash",
                           description: "Pay with cash after your ride",
@@ -717,7 +775,7 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                           description: "Balance: \$45.50",
                           imagePath: 'assets/icons/walletIocn.png',
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: sectionGap),
                         // Row(
                         //   children: [
                         //     SizedBox(
@@ -749,7 +807,7 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                         // SizedBox(height: 20),
                         Divider(color: Colors.grey[700], thickness: 1.5),
                         Container(
-                          padding: EdgeInsets.all(15),
+                          padding: EdgeInsets.all(15 * contentScale),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -759,9 +817,9 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                               if (hasDiscount)
                                 Text(
                                   '\$${originalPriceValue.toStringAsFixed(2)}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: Colors.white70,
-                                    fontSize: 12,
+                                    fontSize: strikePriceFontSize,
                                     decoration: TextDecoration.lineThrough,
                                   ),
                                 ),
@@ -769,67 +827,58 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  "Total".text16White500(),
-                                  "\$${effectivePriceValue.toStringAsFixed(2)}"
-                                      .text16White500(),
+                                  Text(
+                                    "Total",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: priceFontSize,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Text(
+                                    "\$${effectivePriceValue.toStringAsFixed(2)}",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: priceFontSize,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: sectionGap),
 
                         Row(
                           children: [
-                            // Expanded(
-                            //   flex: 1,
-                            //   child: NormalCustomIconButton(
-                            //     icon: Icons.call_outlined,
-                            //     iconSize: 25,
-                            //     onPressed: () {
-                            //       Get.to(CallScreen());
-                            //     },
-                            //   ),
-                            // ),
-                            SizedBox(width: 15),
-                            SizedBox(
-                              width: size.width * 0.4,
-                              child: NormalCustomIconButton(
-                                icon: Icons.messenger_outline,
-                                iconSize: 32,
-                                onPressed: () {
-                                  Get.to(
-                                    () => ChatScreenRTH(
-                                      selectedDriver: widget.selectedDriver,
-                                      rideBookingInfoFromResponse:
-                                          widget.rideBookingInfoFromResponse,
-                                    ),
-                                  );
-                                },
+                            Expanded(
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: NormalCustomIconButton(
+                                  icon: Icons.messenger_outline,
+                                  iconSize: actionIconSize,
+                                  onPressed: () {
+                                    Get.to(
+                                      () => ChatScreenRTH(
+                                        selectedDriver: widget.selectedDriver,
+                                        rideBookingInfoFromResponse:
+                                            widget.rideBookingInfoFromResponse,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             ),
-                            SizedBox(width: 15),
-                            // Expanded(
-                            //   flex: 3,
-                            //   child: SmallSemiTranparentButton(
-                            //     fillColor: Color(0xffBFC1C5),
-                            //     height: 51,
-                            //     fontSize: 18,
-                            //     circularRadious: 30,
-                            //     textColor: Colors.black,
-                            //     text: "Cancel Ride",
-                            //     onPressed: () {
-                            //       // Handle cancel
-                            //     },
-                            //   ),
-                            // ),
-                            SizedBox(width: 8),
-                            SizedBox(
-                              width: size.width * 0.4,
+                            SizedBox(width: 12 * contentScale),
+                            Expanded(
+                              flex: 2,
                               child: NormalCustomButton(
-                                height: 51,
-                                weight: size.width * 0.4, // or double.infinity
-                                fontSize: 18,
+                                height: actionButtonHeight,
+                                weight: double.infinity,
+                                fontSize: actionButtonFontSize,
                                 circularRadious: 30,
                                 text: "Continue",
                                 onPressed: () {

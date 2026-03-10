@@ -71,7 +71,7 @@ class _WalletScreenState extends State<WalletScreen> {
               children: [
                 BackButton(color: Colors.white, onPressed: () => Get.back()),
                 Text(
-                  'Wallet',
+                  'Continue to Pay',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
