@@ -307,6 +307,95 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
     }
   }
 
+  Future<bool> _handlePaymentSelection() async {
+    if (_selectedPaymentType == null) {
+      showCustomSnackBar(
+        'Select a payment method',
+        subMessage: 'Choose Wallet or Cash before continuing.',
+        isError: true,
+      );
+      return false;
+    }
+
+    if (_selectedPaymentType == 'Cash') {
+      final shouldSwitchToWallet = await Get.dialog<bool>(
+        AlertDialog(
+          backgroundColor: const Color(0xFF303644),
+          title: const Text('Cash Payment Coming Soon'),
+          content: const Text(
+            'Cash payments will be available in an upcoming update. Please use Wallet to continue this ride.',
+          ),
+          titleTextStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+          contentTextStyle: const TextStyle(
+            color: Colors.white70,
+            fontSize: 14,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(result: false),
+              child: const Text('Not now'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.back(result: true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFCE0000),
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('Use Wallet'),
+            ),
+          ],
+        ),
+        barrierDismissible: true,
+      );
+
+      if (shouldSwitchToWallet == true) {
+        _onProfileSelected('Wallet');
+        return true;
+      }
+      return false;
+    }
+
+    return true;
+  }
+
+  void _handleContinueToWallet() async {
+    final canContinue = await _handlePaymentSelection();
+    if (!canContinue) return;
+
+    final fare =
+        widget.rideBookingInfoFromResponse?.data?.totalFare ??
+        _calculatePriceValue().toStringAsFixed(2);
+
+    print("Fare: wallet screen: $fare");
+    final driverId =
+        widget.selectedDriver?.driver.id ??
+        bookingController.currentBooking.value?.driverId ??
+        bookingController.driver.value?.id;
+    final stripeDriverId = widget.selectedDriver?.driver.payoutAccountId;
+
+    if (driverId == null || stripeDriverId == null) {
+      showCustomSnackBar(
+        'Unable to continue',
+        subMessage: 'Missing driver payment information.',
+      );
+      return;
+    }
+
+    Get.to(
+      () => WalletScreen(
+        rideId: widget.rideBookingInfoFromResponse?.data?.rideId ?? "",
+        rideAmount: fare,
+        driverId: driverId,
+        stripeDriverId: stripeDriverId,
+        selectedDriver: widget.selectedDriver,
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -767,7 +856,7 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                         SizedBox(height: largeGap),
                         _buildProfileOption(
                           type: "Cash",
-                          description: "Pay with cash after your ride",
+                          description: "Available in an upcoming update",
                           imagePath: 'assets/icons/dollarIcon.png',
                         ),
                         _buildProfileOption(
@@ -881,52 +970,7 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                                 fontSize: actionButtonFontSize,
                                 circularRadious: 30,
                                 text: "Continue",
-                                onPressed: () {
-                                  final fare =
-                                      widget
-                                          .rideBookingInfoFromResponse
-                                          ?.data
-                                          ?.totalFare ??
-                                      _calculatePriceValue().toStringAsFixed(2);
-
-                                  print("Fare: wallet screen: $fare");
-                                  final driverId =
-                                      widget.selectedDriver?.driver.id ??
-                                      bookingController
-                                          .currentBooking
-                                          .value
-                                          ?.driverId ??
-                                      bookingController.driver.value?.id;
-                                  final stripeDriverId = widget
-                                      .selectedDriver
-                                      ?.driver
-                                      .payoutAccountId;
-
-                                  if (driverId == null ||
-                                      stripeDriverId == null) {
-                                    showCustomSnackBar(
-                                      'Unable to continue',
-                                      subMessage:
-                                          'Missing driver payment information.',
-                                    );
-                                    return;
-                                  }
-
-                                  Get.to(
-                                    () => WalletScreen(
-                                      rideId:
-                                          widget
-                                              .rideBookingInfoFromResponse
-                                              ?.data
-                                              ?.rideId ??
-                                          "",
-                                      rideAmount: fare,
-                                      driverId: driverId,
-                                      stripeDriverId: stripeDriverId,
-                                      selectedDriver: widget.selectedDriver,
-                                    ),
-                                  );
-                                },
+                                onPressed: _handleContinueToWallet,
                               ),
                             ),
                           ],

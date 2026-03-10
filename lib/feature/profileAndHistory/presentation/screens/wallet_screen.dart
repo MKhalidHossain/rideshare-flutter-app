@@ -343,6 +343,9 @@ class _WalletScreenState extends State<WalletScreen> {
 
     try {
       setState(() => _isProcessingPayment = true);
+      debugPrint(
+        'Creating payment for driverId=$driverId stripeDriverId=$stripeDriverId amount=${_convertToMinorUnit(amount)}',
+      );
       final response = await _homeController.createPayment(
         CreatePaymentRequestModel(
           rideId: widget.rideId,

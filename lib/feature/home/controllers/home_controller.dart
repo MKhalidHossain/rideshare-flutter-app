@@ -6,7 +6,6 @@ import 'package:rideztohealth/feature/home/domain/reponse_model/add_saved_place_
 import 'package:rideztohealth/feature/home/domain/reponse_model/delete_saved_place_response_model.dart';
 import 'package:rideztohealth/feature/home/domain/reponse_model/get_all_services_response_model.dart';
 import 'package:rideztohealth/feature/home/domain/reponse_model/get_search_destination_for_find_Nearest_drivers_response_model.dart';
-import 'package:rideztohealth/feature/home/presentation/screens/home_screen.dart';
 import 'package:rideztohealth/feature/payment/domain/create_payment_request_model.dart';
 import 'package:rideztohealth/helpers/custom_snackbar.dart';
 import '../domain/request_model/ride_booking_info_request_model.dart';
@@ -14,6 +13,7 @@ import '../domain/reponse_model/get_a_category_response_model.dart';
 import '../domain/reponse_model/get_recent_trips_response_model.dart';
 import '../domain/reponse_model/get_saved_places_response_model.dart';
 import '../domain/reponse_model/request_ride_response_model.dart';
+import '../presentation/screens/home_screen.dart';
 import '../services/home_service_interface.dart';
 
 class HomeController extends GetxController implements GetxService {
@@ -347,12 +347,16 @@ class HomeController extends GetxController implements GetxService {
         final parsedBody = _responseToMap(response.body);
         final parsedResponse = CreatePaymentResponseModel.fromJson(parsedBody);
         createPaymentResponseModel = parsedResponse;
-        Get.to(HomeScreen());
+             Get.to(HomeScreen());
         return parsedResponse;
       }
 
       final message =
-          _extractErrorMessage(response.body) ?? 'Unable to create payment';
+          _mapCreatePaymentError(
+            _extractErrorMessage(response.body),
+            requestModel.stripeDriverId ?? 'unknown',
+          ) ??
+          'Unable to create payment';
       throw Exception(message);
     } catch (e) {
       debugPrint("⚠️ Error fetching HomeController : createPayment : $e\n");
@@ -385,6 +389,19 @@ class HomeController extends GetxController implements GetxService {
       return body;
     }
     return null;
+  }
+
+  String? _mapCreatePaymentError(String? message, String stripeDriverId) {
+    if (message == null || message.isEmpty) return null;
+
+    final normalizedMessage = message.toLowerCase();
+    if (normalizedMessage.contains('no such destination')) {
+      return 'This driver payout account is not configured correctly. '
+          'Please try another driver or ask support to reconnect Stripe '
+          'for account $stripeDriverId.';
+    }
+
+    return message;
   }
 
   // Future<void> getSearchDestinationForFindNearestDrivers(
