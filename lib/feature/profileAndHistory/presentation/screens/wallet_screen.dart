@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rideztohealth/core/extensions/text_extensions.dart';
 import 'package:rideztohealth/core/widgets/wide_custom_button.dart';
 import 'package:rideztohealth/feature/home/controllers/home_controller.dart';
 import 'package:rideztohealth/feature/home/domain/reponse_model/get_search_destination_for_find_Nearest_drivers_response_model.dart';
@@ -10,17 +9,15 @@ import 'package:rideztohealth/feature/payment/presentation/payment_webview_scree
 import '../../../map/controllers/locaion_controller.dart';
 import '../widgets/payment_method_card.dart';
 import 'add_card_screen.dart';
-import 'add_funds_screen.dart';
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({
-
     super.key,
     this.rideId,
     this.rideAmount,
     this.driverId,
     this.stripeDriverId,
-   required this.selectedDriver,
+    required this.selectedDriver,
   });
   final String? rideId;
   final String? rideAmount;
@@ -33,7 +30,6 @@ class WalletScreen extends StatefulWidget {
 }
 
 class _WalletScreenState extends State<WalletScreen> {
-  double balance = 225.0;
   List<PaymentMethod> paymentMethods = [
     PaymentMethod('Stripe', 'assets/images/Stripe_Logo.png', true),
     // PaymentMethod('Visa', 'assets/images/Stripe_Logo.png', false),
@@ -56,56 +52,24 @@ class _WalletScreenState extends State<WalletScreen> {
 
     print("ride Id from wallet screen: ${widget.rideId}");
 
-        locationController.getCurrentLocation();
-
+    locationController.getCurrentLocation();
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      //  backgroundColor: Color(0xFF34495E),
-      // appBar: _buildAppBar(),
-      body: _buildBody(),
-    );
+    return Scaffold(body: _buildBody());
   }
-
-  // PreferredSizeWidget _buildAppBar() {
-  //   return AppBar(
-  //     backgroundColor: Colors.transparent,
-  //     elevation: 0,
-  //     leading: BackButton(color: Colors.white),
-  //     title: Text(
-  //       'Wallet',
-  //       style: TextStyle(
-  //         color: Colors.white,
-  //         fontSize: 18,
-  //         fontWeight: FontWeight.w600,
-  //       ),
-  //     ),
-  //     centerTitle: true,
-  //     actions: [
-  //       IconButton(
-  //         icon: Icon(Icons.more_vert, color: Colors.white),
-  //         onPressed: () => _showOptionsMenu(),
-  //       ),
-  //     ],
-  //   );
-  // }
 
   Widget _buildBody() {
     return Padding(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: SafeArea(
         child: Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                BackButton(
-                  color: Colors.white,
-                  onPressed: () => Get.back(),
-                ),
+                BackButton(color: Colors.white, onPressed: () => Get.back()),
                 Text(
                   'Wallet',
                   style: TextStyle(
@@ -114,29 +78,25 @@ class _WalletScreenState extends State<WalletScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-
-                IconButton(
-                  icon: Icon(Icons.more_vert, color: Colors.white),
-                  onPressed: () => _showOptionsMenu(),
-                ),
+                const SizedBox(width: 48),
               ],
             ),
-            SizedBox(height: 20),
-            // _buildBalanceSection(),
+            const SizedBox(height: 20),
             if (widget.rideAmount != null) ...[
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _buildFareSummaryCard(),
             ],
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             _buildPaymentMethodsSection(),
-            Spacer(),
+            const Spacer(),
             WideCustomButton(
               text: _canStartPayment ? 'Continue to Pay' : 'Continue',
               isLoading: _isProcessingPayment,
               loadingText: 'Processing...',
               onPressed: () {
-                final rideDuration = locationController.distance.value.toString();
-                  print("ride duration from wallet screen: $rideDuration");
+                final rideDuration = locationController.distance.value
+                    .toString();
+                print("ride duration from wallet screen: $rideDuration");
                 if (_canStartPayment) {
                   if (_isProcessingPayment) return;
                   _handleContinue(rideDuration);
@@ -151,99 +111,9 @@ class _WalletScreenState extends State<WalletScreen> {
     );
   }
 
-  Widget _buildBalanceSection() {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white10,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // SizedBox(height: 40),
-          Text(
-            '\$${balance.toStringAsFixed(0)}',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 48,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            'Rider Cash',
-            style: TextStyle(color: Colors.grey[400], fontSize: 16),
-          ),
-          if (widget.rideAmount != null) ...[
-            SizedBox(height: 12),
-            Divider(color: Colors.white12, height: 1),
-            SizedBox(height: 12),
-            Text(
-              'Ride Fare Due',
-              style: TextStyle(color: Colors.grey[400], fontSize: 14),
-            ),
-            Text(
-              '\$${widget.rideAmount}',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 26,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-          SizedBox(height: 20),
-          SizedBox(
-            width: size.width * 0.5,
-            child: ElevatedButton(
-              onPressed: () {
-                Get.to(
-                  AddFundsScreen(
-                    currentBalance: balance,
-                    onFundsAdded: (amount) {
-                      setState(() {
-                        balance += amount;
-                      });
-                    },
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white12,
-                padding: EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
-                  side: BorderSide(color: Colors.grey[600]!),
-                ),
-                elevation: 0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.add, color: Colors.white, size: 25),
-                  SizedBox(width: 8),
-                  'Add Money'.text18White500(),
-                  // Text(
-                  //   'Add Money',
-                  //   style: TextStyle(
-                  //     color: Colors.white,
-                  //     fontSize: 18,
-                  //     fontWeight: FontWeight.w500,
-                  //   ),
-                  // ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildFareSummaryCard() {
     final amount = widget.rideAmount;
-    if (amount == null) return SizedBox.shrink();
+    if (amount == null) return const SizedBox.shrink();
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -284,61 +154,22 @@ class _WalletScreenState extends State<WalletScreen> {
       children: [
         Text(
           'Add Payment Methods',
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         ...paymentMethods.map(
           (method) => PaymentMethodCard(
             method: method,
             onTap: () => _handlePaymentMethodTap(method),
           ),
         ),
-        const SizedBox(height: 20),
-
-        // Container(
-        //   width: double.infinity,
-        //   child: TextButton(
-        //     onPressed: () => _navigateToAddCard(),
-        //     style: TextButton.styleFrom(
-        //       padding: EdgeInsets.symmetric(vertical: 15),
-        //       shape: RoundedRectangleBorder(
-        //         borderRadius: BorderRadius.circular(8),
-        //         side: BorderSide(color: Colors.red),
-        //       ),
-        //     ),
-        //     child: Text(
-        //       '+ Add new card/method',
-        //       style: TextStyle(
-        //         color: Colors.red,
-        //         fontSize: 16,
-        //         fontWeight: FontWeight.w500,
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }
-
-  // void _navigateToAddFunds() {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => AddFundsScreen(
-  //         currentBalance: balance,
-  //         onFundsAdded: (amount) {
-  //           setState(() {
-  //             balance += amount;
-  //           });
-  //         },
-  //       ),
-  //     ),
-  //   );
-  // }
 
   void _navigateToAddCard() {
     Navigator.push(
@@ -375,7 +206,7 @@ class _WalletScreenState extends State<WalletScreen> {
     if (method.name == 'Visa' && !_hasVisaCard()) {
       _navigateToAddCard();
     } else {
-      setState(() { 
+      setState(() {
         paymentMethods = paymentMethods
             .map(
               (pm) =>
@@ -444,70 +275,6 @@ class _WalletScreenState extends State<WalletScreen> {
               child: Text('Remove', style: TextStyle(color: Colors.red)),
             ),
           ],
-        );
-      },
-    );
-  }
-
-  void _showOptionsMenu() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Color(0xFF2C3E50),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return Container(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey[600],
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              SizedBox(height: 20),
-              ListTile(
-                leading: Icon(Icons.history, color: Colors.white),
-                title: Text(
-                  'Transaction History',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _showSuccessMessage(
-                    'Transaction history feature coming soon!',
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.settings, color: Colors.white),
-                title: Text(
-                  'Wallet Settings',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _showSuccessMessage('Wallet settings feature coming soon!');
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.help, color: Colors.white),
-                title: Text(
-                  'Help & Support',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _showSuccessMessage('Help & support feature coming soon!');
-                },
-              ),
-            ],
-          ),
         );
       },
     );
@@ -586,8 +353,6 @@ class _WalletScreenState extends State<WalletScreen> {
         ),
       );
 
-  
-
       final paymentUrl = response.url;
       if (paymentUrl == null || paymentUrl.isEmpty) {
         _showErrorMessage('Payment link is unavailable');
@@ -599,7 +364,7 @@ class _WalletScreenState extends State<WalletScreen> {
       final completed = await Get.to<bool>(
         () => PaymentWebViewScreen(
           paymentUrl: paymentUrl,
-          sessionId: response.sessionId, 
+          sessionId: response.sessionId,
           selectedDriver: widget.selectedDriver,
         ),
       );

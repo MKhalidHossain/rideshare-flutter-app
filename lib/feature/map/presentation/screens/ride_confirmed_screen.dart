@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:rideztohealth/core/widgets/shimmer/shimmer_skeleton.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rideztohealth/core/extensions/text_extensions.dart';
+import 'package:rideztohealth/feature/auth/controllers/auth_controller.dart';
+import 'package:rideztohealth/feature/auth/presentation/screens/user_login_screen.dart';
 import 'package:rideztohealth/feature/home/controllers/home_controller.dart';
 import 'package:rideztohealth/feature/home/domain/reponse_model/get_search_destination_for_find_Nearest_drivers_response_model.dart';
 import 'package:rideztohealth/helpers/custom_snackbar.dart';
@@ -25,15 +27,15 @@ import '../../controllers/locaion_controller.dart';
 // ignore: use_key_in_widget_constructors
 class RideConfirmedScreen extends StatefulWidget {
   const RideConfirmedScreen({
-  Key? key,
-  this.selectedDriver, 
-  this.rideBookingInfoFromResponse,
-  this.snackberMessage,
+    Key? key,
+    this.selectedDriver,
+    this.rideBookingInfoFromResponse,
+    this.snackberMessage,
   }) : super(key: key);
 
   final NearestDriverData? selectedDriver;
-  final RequestRideResponseModel ? rideBookingInfoFromResponse;
-  final String ?snackberMessage ;
+  final RequestRideResponseModel? rideBookingInfoFromResponse;
+  final String? snackberMessage;
 
   @override
   State<RideConfirmedScreen> createState() => _RideConfirmedScreenState();
@@ -45,6 +47,7 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
   final BookingController bookingController = Get.find<BookingController>();
 
   final HomeController homeController = Get.find<HomeController>();
+  final AuthController authController = Get.find<AuthController>();
 
   final AppController appController = Get.find<AppController>();
 
@@ -53,30 +56,265 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
     zoom: 14.0,
   );
 
-  final _formKey = GlobalKey<FormState>();
-
   String? _selectedPaymentType;
 
-  bool _showProfileError = false;
+  bool _isSavingRide = false;
 
   // Bottom sheet height control
   static const double _sheetHeightFactor = 0.7; // default 60%; tweak as needed
+  static const List<String> _savedPlaceTypes = ['Home', 'Work', 'Favorite'];
 
   void _onProfileSelected(String profileType) {
     setState(() {
       _selectedPaymentType = profileType;
-      _showProfileError = false;
     });
+  }
+
+  String _buildDefaultSavedPlaceName(String address) {
+    final trimmedAddress = address.trim();
+    if (trimmedAddress.isEmpty) {
+      return 'Saved Place';
+    }
+    final parts = trimmedAddress.split(',');
+    final firstPart = parts.first.trim();
+    return firstPart.isEmpty ? trimmedAddress : firstPart;
+  }
+
+  Future<bool> _showLoginRequiredDialog() async {
+    final shouldLogin = await Get.dialog<bool>(
+      AlertDialog(
+        backgroundColor: const Color(0xFF303644),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        title: const Text('Sign in required'),
+        content: const Text('You need to sign in to save this ride for later.'),
+        titleTextStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+        ),
+        contentTextStyle: const TextStyle(color: Colors.white, fontSize: 14),
+        actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        actions: [
+          Row(
+            children: [
+              Expanded(
+                child: TextButton(
+                  onPressed: () => Get.back(result: false),
+                  child: const Text('Not now'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () => Get.back(result: true),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFCE0000),
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text('Sign in'),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      barrierDismissible: true,
+    );
+
+    return shouldLogin ?? false;
+  }
+
+  Future<Map<String, String>?> _showSaveRideDialog(String address) async {
+    final nameController = TextEditingController(
+      text: _buildDefaultSavedPlaceName(address),
+    );
+    String selectedType = _savedPlaceTypes.last;
+
+    final result = await showDialog<Map<String, String>>(
+      context: context,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              backgroundColor: const Color(0xFF303644),
+              insetPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 16,
+              ),
+              title: const Text('Save Ride'),
+              titleTextStyle: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextField(
+                      controller: nameController,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Place name',
+                        labelStyle: const TextStyle(color: Colors.white70),
+                        hintText: 'Home, Clinic, Office...',
+                        hintStyle: const TextStyle(color: Colors.white38),
+                        filled: true,
+                        fillColor: Colors.white10,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      address,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 13,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: _savedPlaceTypes.map((type) {
+                        final isSelected = selectedType == type;
+                        return ChoiceChip(
+                          label: Text(type),
+                          selected: isSelected,
+                          onSelected: (_) {
+                            setDialogState(() {
+                              selectedType = type;
+                            });
+                          },
+                          selectedColor: const Color(0xFFCE0000),
+                          backgroundColor: Colors.white10,
+                          labelStyle: TextStyle(
+                            color: isSelected ? Colors.white : Colors.white70,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    final name = nameController.text.trim();
+                    if (name.isEmpty) {
+                      showCustomSnackBar(
+                        'Place name is required',
+                        isError: true,
+                      );
+                      return;
+                    }
+                    Navigator.of(
+                      dialogContext,
+                    ).pop({'name': name, 'type': selectedType});
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFCE0000),
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text('Save'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    nameController.dispose();
+    return result;
+  }
+
+  Future<void> _handleSaveRide() async {
+    if (_isSavingRide) return;
+
+    if (!authController.isLoggedIn()) {
+      final shouldLogin = await _showLoginRequiredDialog();
+      if (shouldLogin) {
+        Get.to(() => const UserLoginScreen());
+      }
+      return;
+    }
+
+    final destination = locationController.destinationLocation.value;
+    final address = locationController.destinationAddress.value.trim();
+
+    if (destination == null || address.isEmpty) {
+      showCustomSnackBar(
+        'Unable to save ride',
+        subMessage: 'Select a valid destination before saving this ride.',
+        isError: true,
+      );
+      return;
+    }
+
+    final existingSavedPlaces =
+        homeController.getSavedPlacesResponseModel.data ?? [];
+    final alreadySaved = existingSavedPlaces.any(
+      (place) => place.address.trim().toLowerCase() == address.toLowerCase(),
+    );
+    if (alreadySaved) {
+      showCustomSnackBar('This place is already saved', isError: false);
+      return;
+    }
+
+    final saveDetails = await _showSaveRideDialog(address);
+    if (saveDetails == null) return;
+
+    setState(() {
+      _isSavingRide = true;
+    });
+
+    await homeController.addSavedPlaces(
+      saveDetails['name']!,
+      address,
+      destination.latitude,
+      destination.longitude,
+      saveDetails['type']!,
+    );
+
+    if (!mounted) return;
+
+    final response = homeController.addSavedPlacesResponseModel;
+    if (response.success == true) {
+      await homeController.getSavedPlaces();
+      showCustomSnackBar(
+        response.message ?? 'Ride saved successfully',
+        isError: false,
+      );
+    } else {
+      showCustomSnackBar(
+        response.message ?? 'Failed to save ride',
+        isError: true,
+      );
+    }
+
+    if (mounted) {
+      setState(() {
+        _isSavingRide = false;
+      });
+    }
   }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-          if(mounted){
-   showCustomSnackBar("${widget.snackberMessage}", isError: false);
-
-    }
+      if (mounted) {
+        showCustomSnackBar("${widget.snackberMessage}", isError: false);
+      }
     });
   }
 
@@ -94,14 +332,13 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
           color: isSelected
-              // ignore: deprecated_member_use
-              ? AppColors.context(context).primaryColor.withOpacity(0.08)
+              ? AppColors.context(context).primaryColor.withValues(alpha: 0.08)
               : Colors.white12,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
                 ? AppColors.context(context).primaryColor
-                : Colors.grey.withOpacity(0.07),
+                : Colors.grey.withValues(alpha: 0.07),
             width: 1,
           ),
         ),
@@ -112,7 +349,9 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: isSelected
-                    ? AppColors.context(context).primaryColor.withOpacity(0.1)
+                    ? AppColors.context(
+                        context,
+                      ).primaryColor.withValues(alpha: 0.1)
                     : Colors.white12,
               ),
               child: Image.asset(imagePath, height: 30, width: 30),
@@ -155,8 +394,7 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
       return false;
     }
     final now = DateTime.now();
-    if (commission.startDate != null &&
-        now.isBefore(commission.startDate!)) {
+    if (commission.startDate != null && now.isBefore(commission.startDate!)) {
       return false;
     }
     if (commission.endDate != null && now.isAfter(commission.endDate!)) {
@@ -190,9 +428,11 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
     }
     final service = widget.selectedDriver!.service;
     final distance = locationController.distance.value;
-    double price = (service?.baseFare.toDouble() ?? 0.00) +
+    double price =
+        (service?.baseFare.toDouble() ?? 0.00) +
         (distance * (service?.perKmRate.toDouble() ?? 0.00));
-    if ((service?.minimumFare ?? 0) > 0 && price < (service?.minimumFare ?? 0)) {
+    if ((service?.minimumFare ?? 0) > 0 &&
+        price < (service?.minimumFare ?? 0)) {
       price = service?.minimumFare.toDouble() ?? 0.00;
     }
     return double.parse(price.toStringAsFixed(2));
@@ -205,11 +445,6 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
       widget.selectedDriver?.commission,
     );
     return double.parse(discountedPrice.toStringAsFixed(2));
-  }
-
-  String _calculatedPrice() {
-    final price = _calculatePriceValue();
-    return "\$${price.toStringAsFixed(2)}";
   }
 
   @override
@@ -331,8 +566,7 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                 child: SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
                   child: Obx(
-                    () =>
-                     Column(
+                    () => Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -343,26 +577,19 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                             ),
                             Text(
                               'Your driver is coming  ...',
-                              
-                              //in ${widget.selectedDriver?.service?.estimatedArrivalTime ?? 3} min',
-                              style: TextStyle(color: Colors.white, fontSize: 15),
-                            ),
-                    
-                            NormalCustomButton(
-                              
-                              text: "Save Ride",
-                              weight: 100,
-                               onPressed: (){
-                                final name = locationController.destinationAddress.value ?? 'Saved Location';
-                                final addresss = locationController.destinationAddress.value ?? 'Unknown Address';
-                                final latitude = locationController.destinationLocation.value?.latitude ?? 0.0;
-                                final longitude = locationController.destinationLocation.value?.longitude ?? 0.0;
-                                final type = ['Home', 'Work', 'Favorite'].first;
 
-                                print('Name: $name, Address: $addresss, Latitude: $latitude, Longitude: $longitude, Type: $type');
-                                homeController.addSavedPlaces(name, addresss, latitude, longitude, type);
-                    
-                            })
+                              //in ${widget.selectedDriver?.service?.estimatedArrivalTime ?? 3} min',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
+
+                            NormalCustomButton(
+                              text: _isSavingRide ? "Saving..." : "Save Ride",
+                              weight: 100,
+                              onPressed: _handleSaveRide,
+                            ),
                           ],
                         ),
                         SizedBox(height: 20),
@@ -374,20 +601,20 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                               CircleAvatar(
                                 radius: 30,
                                 backgroundImage: widget.selectedDriver == null
-                                    ? const AssetImage('assets/images/user6.png')
+                                    ? const AssetImage(
+                                        'assets/images/user6.png',
+                                      )
                                     : null,
                                 backgroundColor: Colors.grey,
                                 child: widget.selectedDriver != null
-
-
                                     ? Text(
                                         (widget
-                                            .selectedDriver!
-                                            .driver
-                                            .userId
-                                            ?.fullName ??
-                                            'U')[0]
-                                            .toUpperCase()  ,
+                                                    .selectedDriver!
+                                                    .driver
+                                                    .userId
+                                                    ?.fullName ??
+                                                'U')[0]
+                                            .toUpperCase(),
                                         style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 18,
@@ -454,11 +681,13 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                                 ),
                               ),
                               (widget.selectedDriver?.service?.serviceImage
-                                              ?.trim()
-                                              .isNotEmpty ??
-                                          false)
+                                          ?.trim()
+                                          .isNotEmpty ??
+                                      false)
                                   ? Image.network(
-                                      widget.selectedDriver!.service!
+                                      widget
+                                          .selectedDriver!
+                                          .service!
                                           .serviceImage!,
                                       width: 80,
                                       fit: BoxFit.contain,
@@ -549,7 +778,7 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                           ),
                         ),
                         SizedBox(height: 10),
-                    
+
                         Row(
                           children: [
                             // Expanded(
@@ -610,7 +839,7 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                                           ?.data
                                           ?.totalFare ??
                                       _calculatePriceValue().toStringAsFixed(2);
-                                  
+
                                   print("Fare: wallet screen: $fare");
                                   final driverId =
                                       widget.selectedDriver?.driver.id ??
@@ -623,7 +852,7 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                                       .selectedDriver
                                       ?.driver
                                       .payoutAccountId;
-                    
+
                                   if (driverId == null ||
                                       stripeDriverId == null) {
                                     showCustomSnackBar(
@@ -633,15 +862,19 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
                                     );
                                     return;
                                   }
-                    
+
                                   Get.to(
                                     () => WalletScreen(
-                                      rideId: widget.rideBookingInfoFromResponse?.data?.rideId ?? "",
-                                      rideAmount: fare ?? "0.00",
+                                      rideId:
+                                          widget
+                                              .rideBookingInfoFromResponse
+                                              ?.data
+                                              ?.rideId ??
+                                          "",
+                                      rideAmount: fare,
                                       driverId: driverId,
-                                      stripeDriverId: stripeDriverId, 
-                                      selectedDriver: widget.selectedDriver ,
-                    
+                                      stripeDriverId: stripeDriverId,
+                                      selectedDriver: widget.selectedDriver,
                                     ),
                                   );
                                 },
