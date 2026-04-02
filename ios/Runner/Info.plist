@@ -62,7 +62,7 @@
 	</array>
 
 	<key>NSCameraUsageDescription</key>
-	<string>RidezToHealth needs camera access so you can take a photo for your profile picture or upload required documents such as a driver's licence or insurance card.</string>
+	<string>RidezToHealth needs camera access so you can take a photo for your profile picture or upload required documents such as a driver's license or insurance card.</string>
 
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>RidezToHealth needs access to your photo library so you can choose an existing photo for your profile or upload documents required for your account.</string>

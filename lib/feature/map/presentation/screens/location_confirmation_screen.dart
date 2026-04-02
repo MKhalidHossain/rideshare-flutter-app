@@ -5,15 +5,15 @@ import 'package:rideztohealth/core/widgets/shimmer/shimmer_skeleton.dart';
 import '../../../../helpers/custom_snackbar.dart';
 import '../../controllers/locaion_controller.dart';
 import '../../controllers/booking_controller.dart'; // Assuming bookingController holds price/time
-import '../../controllers/app_controller.dart';// Import the search screen
-
+import '../../controllers/app_controller.dart'; // Import the search screen
 
 class LocationConfirmationScreen extends StatelessWidget {
   const LocationConfirmationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final LocationController locationController = Get.find<LocationController>();
+    final LocationController locationController =
+        Get.find<LocationController>();
     final BookingController bookingController = Get.find<BookingController>();
     final AppController appController = Get.find<AppController>();
 
@@ -25,10 +25,7 @@ class LocationConfirmationScreen extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: const Color(0xFF2E2E38), // Dark background color
-        leading: BackButton(
-          color: Colors.white,
-          onPressed: () => Get.back(),
-        ),
+        leading: BackButton(color: Colors.white, onPressed: () => Get.back()),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -38,7 +35,9 @@ class LocationConfirmationScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFF3B3B42), // Darker background for the card
+                color: const Color(
+                  0xFF3B3B42,
+                ), // Darker background for the card
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
@@ -48,7 +47,7 @@ class LocationConfirmationScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () async {
                       // UNCOMMENTED: Navigate to search screen for pickup location
-                    //  await Get.to(() => DestinationSearchScreen(isPickup: true));
+                      //  await Get.to(() => DestinationSearchScreen(isPickup: true));
                     },
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,17 +73,19 @@ class LocationConfirmationScreen extends StatelessWidget {
                                   fontSize: 12,
                                 ),
                               ),
-                              Obx(() => Text(
-                                locationController.pickupAddress.value.isEmpty
-                                    ? 'Select Pickup Location'
-                                    : locationController.pickupAddress.value,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
+                              Obx(
+                                () => Text(
+                                  locationController.pickupAddress.value.isEmpty
+                                      ? 'Select Pickup Location'
+                                      : locationController.pickupAddress.value,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              )),
+                              ),
                             ],
                           ),
                         ),
@@ -102,7 +103,7 @@ class LocationConfirmationScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () async {
                       // UNCOMMENTED: Navigate to search screen for destination location
-                     // await Get.to(() => DestinationSearchScreen(isPickup: false));
+                      // await Get.to(() => DestinationSearchScreen(isPickup: false));
                     },
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,17 +129,24 @@ class LocationConfirmationScreen extends StatelessWidget {
                                   fontSize: 12,
                                 ),
                               ),
-                              Obx(() => Text(
-                                locationController.destinationAddress.value.isEmpty
-                                    ? 'Select Destination'
-                                    : locationController.destinationAddress.value,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
+                              Obx(
+                                () => Text(
+                                  locationController
+                                          .destinationAddress
+                                          .value
+                                          .isEmpty
+                                      ? 'Select Destination'
+                                      : locationController
+                                            .destinationAddress
+                                            .value,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              )),
+                              ),
                             ],
                           ),
                         ),
@@ -146,7 +154,7 @@ class LocationConfirmationScreen extends StatelessWidget {
                         Obx(() {
                           if (locationController.distance.value > 0) {
                             return Text(
-                              '${locationController.distance.value.toStringAsFixed(1)}Miles',
+                              '${locationController.distance.value.toStringAsFixed(1)} Miles',
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 14,
@@ -176,14 +184,16 @@ class LocationConfirmationScreen extends StatelessWidget {
                     'Estimated Fare:',
                     style: TextStyle(color: Colors.grey, fontSize: 14),
                   ),
-                  Obx(() => Text(
-                    '\$${bookingController.estimatedPrice.value.toStringAsFixed(2)}',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                  Obx(
+                    () => Text(
+                      '\$${bookingController.estimatedPrice.value.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  )),
+                  ),
                 ],
               ),
             ),
@@ -197,7 +207,8 @@ class LocationConfirmationScreen extends StatelessWidget {
                     : () {
                         // Ensure both pickup and destination are selected before confirming
                         if (locationController.pickupLocation.value == null ||
-                            locationController.destinationLocation.value == null) {
+                            locationController.destinationLocation.value ==
+                                null) {
                           showAppSnackBar(
                             'Error',
                             'Please select both pickup and destination locations.',
@@ -212,7 +223,7 @@ class LocationConfirmationScreen extends StatelessWidget {
                         appController.showLoading(); // Corrected method call
                         Future.delayed(Duration(seconds: 2), () {
                           appController.hideLoading(); // Corrected method call
-                       //  Get.to(() => RideConfirmedScreen()); // Navigate to ride confirmed screen
+                          //  Get.to(() => RideConfirmedScreen()); // Navigate to ride confirmed screen
                         });
                       },
                 style: ElevatedButton.styleFrom(
@@ -222,20 +233,22 @@ class LocationConfirmationScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: Obx(() => appController.isLoading.value
-                    ? const ShimmerBox(
-                        width: 120,
-                        height: 16,
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      )
-                    : const Text(
-                        'Confirm Location',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                child: Obx(
+                  () => appController.isLoading.value
+                      ? const ShimmerBox(
+                          width: 120,
+                          height: 16,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        )
+                      : const Text(
+                          'Confirm Location',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      )),
+                ),
               ),
             ),
           ],
@@ -245,17 +258,7 @@ class LocationConfirmationScreen extends StatelessWidget {
   }
 }
 
-class DestinationSearchScreen {
-}
-
-
-
-
-
-
-
-
-
+class DestinationSearchScreen {}
 
 // class DestinationSearchScreen extends StatelessWidget {
 //   final LocationController locationController = Get.find<LocationController>();
@@ -269,9 +272,6 @@ class DestinationSearchScreen {
 //   },
 //   // ... similarly for selectSavedLocation
 // }
-
-
-
 
 // class LocationController extends GetxController {
 //   // ...
@@ -290,10 +290,6 @@ class DestinationSearchScreen {
 //   }
 //   // ... similarly for selectSavedLocation
 // }
-
-
-
-
 
 // import 'package:flutter/material.dart';
 
@@ -433,7 +429,7 @@ class DestinationSearchScreen {
 //                       ),
 //                       // Distance text on the right side.
 //                       const Text(
-//                         '4.0km', // Placeholder for distance
+//                         '4.0 miles', // Placeholder for distance
 //                         style: TextStyle(
 //                           color: Colors.white,
 //                           fontSize: 14,
@@ -481,20 +477,6 @@ class DestinationSearchScreen {
 //     );
 //   }
 // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
@@ -557,8 +539,8 @@ class DestinationSearchScreen {
 //                     icon: Icons.radio_button_checked,
 //                     iconColor: Colors.green,
 //                     title: 'Pickup Location',
-//                     address: locationController.pickupAddress.value.isEmpty 
-//                       ? '4140 Parker Rd, Allentown, New Mexico 31134' 
+//                     address: locationController.pickupAddress.value.isEmpty
+//                       ? '4140 Parker Rd, Allentown, New Mexico 31134'
 //                       : locationController.pickupAddress.value,
 //                   ),
 //                   SizedBox(height: 12),
@@ -566,16 +548,16 @@ class DestinationSearchScreen {
 //                     icon: Icons.location_on,
 //                     iconColor: Colors.red,
 //                     title: 'Destination',
-//                     address: locationController.destinationAddress.value.isEmpty 
-//                       ? '4140 Parker Rd, Allentown, New Mexico 31134' 
+//                     address: locationController.destinationAddress.value.isEmpty
+//                       ? '4140 Parker Rd, Allentown, New Mexico 31134'
 //                       : locationController.destinationAddress.value,
 //                   ),
 //                 ],
 //               ),
 //             ),
-            
+
 //             SizedBox(height: 20),
-            
+
 //             // Car and Driver Info
 //             Container(
 //               padding: EdgeInsets.all(20),
@@ -654,9 +636,9 @@ class DestinationSearchScreen {
 //                 ],
 //               ),
 //             ),
-            
+
 //             SizedBox(height: 20),
-            
+
 //             // Payment Method
 //             Container(
 //               padding: EdgeInsets.all(20),
@@ -700,9 +682,9 @@ class DestinationSearchScreen {
 //                 ],
 //               ),
 //             ),
-            
+
 //             Spacer(),
-            
+
 //             // Action Buttons
 //             Row(
 //               children: [
@@ -755,19 +737,19 @@ class DestinationSearchScreen {
 //                 ),
 //               ],
 //             ),
-            
+
 //             SizedBox(height: 16),
-            
+
 //             // Confirm Button
 //             SizedBox(
 //               width: double.infinity,
 //               child: ElevatedButton(
-//                 onPressed: appController.isLoading.value 
-//                   ? null 
+//                 onPressed: appController.isLoading.value
+//                   ? null
 //                   : () {
 //                       bookingController.confirmBooking();
 //                       appController.showSnackbar(
-//                         'Success', 
+//                         'Success',
 //                         'Your ride has been confirmed!'
 //                       );
 //                       // Navigate back to map screen

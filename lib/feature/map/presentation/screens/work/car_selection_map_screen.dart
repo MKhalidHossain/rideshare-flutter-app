@@ -21,6 +21,8 @@ class CarSelectionMapScreen extends StatefulWidget {
 }
 
 class _CarSelectionMapScreenState extends State<CarSelectionMapScreen> {
+  static const double _averageCitySpeedMph = 18.6;
+
   final LocationController locationController = Get.find<LocationController>();
 
   late HomeController homeController;
@@ -38,8 +40,8 @@ class _CarSelectionMapScreenState extends State<CarSelectionMapScreen> {
 
   // Calculate estimated time based on distance
   String _calculateEstimatedTime(double distanceInMile) {
-    // Assuming average speed of 30 km/h in city
-    double hours = distanceInMile / 30;
+    // Assuming average city speed of about 18.6 mph
+    double hours = distanceInMile / _averageCitySpeedMph;
     int minutes = (hours * 60).round();
 
     if (minutes < 1) {
@@ -57,13 +59,13 @@ class _CarSelectionMapScreenState extends State<CarSelectionMapScreen> {
   double _calculateEstimatedPriceValue(
     double distanceInMile, {
     num? baseFare,
-    num? perKmRate,
+    num? perMileRate,
     num? minimumFare,
   }) {
-    // Base fare + per km rate with graceful defaults
+    // Base fare + per-mile rate with graceful defaults
     final double resolvedBaseFare = (baseFare ?? 5).toDouble();
-    final double resolvedPerKmRate = (perKmRate ?? 2.5).toDouble();
-    double price = resolvedBaseFare + (distanceInMile * resolvedPerKmRate);
+    final double resolvedPerMileRate = (perMileRate ?? 2.5).toDouble();
+    double price = resolvedBaseFare + (distanceInMile * resolvedPerMileRate);
 
     // Respect minimum fare when provided
     if (minimumFare != null) {
@@ -80,8 +82,7 @@ class _CarSelectionMapScreenState extends State<CarSelectionMapScreen> {
       return false;
     }
     final now = DateTime.now();
-    if (commission.startDate != null &&
-        now.isBefore(commission.startDate!)) {
+    if (commission.startDate != null && now.isBefore(commission.startDate!)) {
       return false;
     }
     if (commission.endDate != null && now.isAfter(commission.endDate!)) {
@@ -125,9 +126,7 @@ class _CarSelectionMapScreenState extends State<CarSelectionMapScreen> {
     print(
       "Time format korar por :${_calculateEstimatedTime(locationController.distance.value)}\n",
     );
-    print(
-      " format korar age :${locationController.distance.value}\n",
-    );
+    print(" format korar age :${locationController.distance.value}\n");
 
     // 1. Call the function to get current location
     // locationController.getCurrentLocation();
@@ -509,7 +508,8 @@ class _CarSelectionMapScreenState extends State<CarSelectionMapScreen> {
                                     _calculateEstimatedPriceValue(
                                       locationController.distance.value,
                                       baseFare: service?.baseFare,
-                                      perKmRate: service?.perKmRate,
+                                      perMileRate:
+                                          service?.effectivePerMileRate,
                                       minimumFare: service?.minimumFare,
                                     );
                                 final discountedPriceValue =
@@ -519,12 +519,13 @@ class _CarSelectionMapScreenState extends State<CarSelectionMapScreen> {
                                     );
                                 final hasDiscount =
                                     discountedPriceValue < originalPriceValue;
-                                final price = (hasDiscount
-                                        ? discountedPriceValue
-                                        : originalPriceValue)
+                                final price =
+                                    (hasDiscount
+                                            ? discountedPriceValue
+                                            : originalPriceValue)
+                                        .toStringAsFixed(2);
+                                final originalPrice = originalPriceValue
                                     .toStringAsFixed(2);
-                                final originalPrice =
-                                    originalPriceValue.toStringAsFixed(2);
                                 final rating = driver.ratings.average
                                     .toStringAsFixed(1);
                                 final isSelected =
@@ -897,10 +898,10 @@ class _CarSelectionMapScreenState extends State<CarSelectionMapScreen> {
 
 //   // Calculate estimated time based on distance
 //   String _calculateEstimatedTime(double distanceInMile) {
-//     // Assuming average speed of 30 km/h in city
+//     // Assuming average speed of ~18.6 mile/h in city
 //     double hours = distanceInMile / 30;
 //     int minutes = (hours * 60).round();
-    
+
 //     if (minutes < 1) {
 //       return '1 min';
 //     } else if (minutes < 60) {
@@ -914,10 +915,10 @@ class _CarSelectionMapScreenState extends State<CarSelectionMapScreen> {
 
 //   // Calculate estimated price based on distance
 //   String _calculateEstimatedPrice(double distanceInMile) {
-//     // Base fare + per km rate
+//     // Base fare + per mile rate
 //     double baseFare = 5.0;
-//     double perKmRate = 2.5;
-//     double price = baseFare + (distanceInMile * perKmRate);
+//     double perMileRate = 2.5;
+//     double price = baseFare + (distanceInMile * perMileRate);
 //     return price.toStringAsFixed(2);
 //   }
 
@@ -930,14 +931,14 @@ class _CarSelectionMapScreenState extends State<CarSelectionMapScreen> {
 //             GoogleMap(
 //               onMapCreated: (GoogleMapController controller) {
 //                 locationController.setMapController(controller);
-                
+
 //                 // Fit both markers in view
 //                 if (locationController.pickupLocation.value != null &&
 //                     locationController.destinationLocation.value != null) {
 //                   Future.delayed(Duration(milliseconds: 500), () {
 //                     LatLng pickup = locationController.pickupLocation.value!;
 //                     LatLng destination = locationController.destinationLocation.value!;
-                    
+
 //                     LatLngBounds bounds = LatLngBounds(
 //                       southwest: LatLng(
 //                         pickup.latitude < destination.latitude
@@ -956,7 +957,7 @@ class _CarSelectionMapScreenState extends State<CarSelectionMapScreen> {
 //                             : destination.longitude,
 //                       ),
 //                     );
-                    
+
 //                     controller.animateCamera(
 //                       CameraUpdate.newLatLngBounds(bounds, 100),
 //                     );
@@ -1094,7 +1095,7 @@ class _CarSelectionMapScreenState extends State<CarSelectionMapScreen> {
 //                               ),
 //                               SizedBox(height: 4),
 //                               Obx(() => Text(
-//                                 '${locationController.distance.value.toStringAsFixed(1)} km',
+//                                 '${locationController.distance.value.toStringAsFixed(1)} miles',
 //                                 style: TextStyle(
 //                                   color: Colors.white,
 //                                   fontSize: 16,
@@ -1310,7 +1311,6 @@ class _CarSelectionMapScreenState extends State<CarSelectionMapScreen> {
 //   }
 // }
 
-
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -1318,7 +1318,6 @@ class _CarSelectionMapScreenState extends State<CarSelectionMapScreen> {
 // import '../../../controllers/booking_controller.dart';
 // import '../../../controllers/locaion_controller.dart';
 // import 'confirm_location_map_screen.dart';
-
 
 // class CarSelectionMapScreen extends StatelessWidget {
 //   final LocationController locationController = Get.find<LocationController>();
@@ -1333,7 +1332,6 @@ class _CarSelectionMapScreenState extends State<CarSelectionMapScreen> {
 //     zoom: 14.0,
 //   );
 
-  
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(

@@ -22,18 +22,13 @@ import 'finding_your_driver_screen.dart';
 
 // ignore: use_key_in_widget_constructors
 class ConfirmYourLocationScreen extends StatelessWidget {
-
-
-  ConfirmYourLocationScreen({
-    super.key, this.selectedDriver, 
-
-    
-    });
+  ConfirmYourLocationScreen({super.key, this.selectedDriver});
 
   final NearestDriverData? selectedDriver;
 
   // Bottom sheet height control for quick tweaking
-  static const double _sheetHeightFactor = 0.35; // adjust here to change default height
+  static const double _sheetHeightFactor =
+      0.35; // adjust here to change default height
 
   static const CameraPosition _initialPosition = CameraPosition(
     target: LatLng(23.8103, 90.4125), // Default to Dhaka, Bangladesh
@@ -48,15 +43,15 @@ class ConfirmYourLocationScreen extends StatelessWidget {
   final AuthController authController = Get.find<AuthController>();
 
   double _calculateEstimatedPriceValue(
-    double distanceKm, {
+    double distanceMiles, {
     num? baseFare,
-    num? perKmRate,
+    num? perMileRate,
     num? minimumFare,
   }) {
     final double resolvedBaseFare = (baseFare ?? 5).toDouble();
-    final double resolvedPerKmRate = (perKmRate ?? 2.5).toDouble();
+    final double resolvedPerMileRate = (perMileRate ?? 2.5).toDouble();
 
-    double price = resolvedBaseFare + (distanceKm * resolvedPerKmRate);
+    double price = resolvedBaseFare + (distanceMiles * resolvedPerMileRate);
 
     if (minimumFare != null) {
       price = price < minimumFare ? minimumFare.toDouble() : price;
@@ -72,8 +67,7 @@ class ConfirmYourLocationScreen extends StatelessWidget {
       return false;
     }
     final now = DateTime.now();
-    if (commission.startDate != null &&
-        now.isBefore(commission.startDate!)) {
+    if (commission.startDate != null && now.isBefore(commission.startDate!)) {
       return false;
     }
     if (commission.endDate != null && now.isAfter(commission.endDate!)) {
@@ -106,7 +100,10 @@ class ConfirmYourLocationScreen extends StatelessWidget {
       final shouldLogin = await Get.dialog<bool>(
         AlertDialog(
           backgroundColor: const Color(0xFF303644),
-          insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          insetPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
+          ),
           title: const Text('Sign in required'),
           content: const Text(
             'You need to sign in to confirm your location and book a ride.',
@@ -116,10 +113,7 @@ class ConfirmYourLocationScreen extends StatelessWidget {
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
-          contentTextStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-          ),
+          contentTextStyle: TextStyle(color: Colors.white, fontSize: 14),
           actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
           actions: [
             Row(
@@ -192,7 +186,8 @@ class ConfirmYourLocationScreen extends StatelessWidget {
 
     final driverData = selectedDriver;
     final pickupLatLng =
-        locationController.pickupLocation.value ?? locationController.currentLocation.value;
+        locationController.pickupLocation.value ??
+        locationController.currentLocation.value;
     final destinationLatLng = locationController.destinationLocation.value;
 
     if (driverData == null) {
@@ -213,7 +208,7 @@ class ConfirmYourLocationScreen extends StatelessWidget {
     final originalFareValue = _calculateEstimatedPriceValue(
       locationController.distance.value,
       baseFare: driverData.service?.baseFare,
-      perKmRate: driverData.service?.perKmRate,
+      perMileRate: driverData.service?.effectivePerMileRate,
       minimumFare: driverData.service?.minimumFare,
     );
     final discountedFareValue = _applyCommissionDiscount(
@@ -252,8 +247,7 @@ class ConfirmYourLocationScreen extends StatelessWidget {
         Get.to(
           () => FindingYourDriverScreen(
             selectedDriver: selectedDriver,
-            rideBookingInfoFromResponse: response
-            
+            rideBookingInfoFromResponse: response,
           ),
         );
       } else {
@@ -362,7 +356,8 @@ class ConfirmYourLocationScreen extends StatelessWidget {
               left: 0,
               right: 0,
               child: Container(
-                height: MediaQuery.of(context).size.height *
+                height:
+                    MediaQuery.of(context).size.height *
                     _sheetHeightFactor, // change factor to adjust default height
                 padding: EdgeInsets.only(
                   top: 10,
@@ -394,7 +389,8 @@ class ConfirmYourLocationScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: () => Get.back(), // Go back to previous screen
+                            onTap: () =>
+                                Get.back(), // Go back to previous screen
                             child: Icon(Icons.arrow_back, color: Colors.white),
                           ),
                           Text(
@@ -442,19 +438,19 @@ class ConfirmYourLocationScreen extends StatelessWidget {
                                 SizedBox(width: 10),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       "From:".text12White(),
                                       Text(
-                                          "Your location",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
+                                        "Your location",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
                                         ),
-                                      
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -511,7 +507,8 @@ class ConfirmYourLocationScreen extends StatelessWidget {
                                   ),
                                   Obx(() {
                                     if (locationController
-                                                .destinationLocation.value !=
+                                                .destinationLocation
+                                                .value !=
                                             null &&
                                         locationController.distance.value > 0) {
                                       return Text(
@@ -531,84 +528,84 @@ class ConfirmYourLocationScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 16),
-                        //               if (selectedDriver != null)
-                        //                 Container(
-                        //                   width: double.infinity,
-                        //                   padding: const EdgeInsets.all(14),
-                        //                   decoration: BoxDecoration(
-                        //                     color: Colors.white10,
-                        //                     borderRadius: BorderRadius.circular(10),
-                        //                   ),
-                        //                   child: Row(
-                        //                     children: [
-                        //                       ClipRRect(
-                        //                         borderRadius: BorderRadius.circular(8),
-                        //                         child: Image.network(
-                        //                           selectedDriver!.service.serviceImage,
-                        //                           height: 60,
-                        //                           width: 80,
-                        //                           fit: BoxFit.cover,
-                        //                           errorBuilder: (_, __, ___) => Image.asset(
-                        //                             'assets/images/privet_car.png',
-                        //                             height: 60,
-                        //                             width: 80,
-                        //                             fit: BoxFit.cover,
-                        //                           ),
-                        //                         ),
-                        //                       ),
-                        //                       const SizedBox(width: 12),
-                        //                       Expanded(
-                        //                         child: Column(
-                        //                           crossAxisAlignment: CrossAxisAlignment.start,
-                        //                           children: [
-                        //                             Text(
-                        //                               selectedDriver!.service.name,
-                        //                               style: const TextStyle(
-                        //                                 color: Colors.white,
-                        //                                 fontSize: 16,
-                        //                                 fontWeight: FontWeight.bold,
-                        //                               ),
-                        //                             ),
-                        //                             Text(
-                        //                               "${selectedDriver!.vehicle.taxiName} • Plate ${selectedDriver!.vehicle.plateNumber}",
-                        //                               style: const TextStyle(
-                        //                                 color: Colors.grey,
-                        //                                 fontSize: 13,
-                        //                               ),
-                        //                             ),
-                        //                             const SizedBox(height: 4),
-                        //                             // 👉 THIS PART: COMMENT OUT / DELETE
-                        // Obx(() {
-                        //   if (locationController
-                        //               .destinationLocation.value !=
-                        //           null &&
-                        //       locationController.distance.value > 0) {
-                        //     return Text(
-                        //       '${locationController.distance.value.toStringAsFixed(1)}km',
-                        //       style: TextStyle(
-                        //         color: Colors.white,
-                        //         fontSize: 15,
-                        //       ),
-                        //     );
-                        //   }
-                        //   return SizedBox.shrink();
-                        // }),
-                        //                           ],
-                        //                         ),
-                        //                       ),
-                        //                       Text(
-                        //                         "${selectedDriver!.service.estimatedArrivalTime} min",
-                        //                         style: const TextStyle(
-                        //                           color: Colors.white,
-                        //                           fontSize: 14,
-                        //                         ),
-                        //                       ),
-                        //                     ],
-                        //                   ),
-                        //                 ),
+                      //               if (selectedDriver != null)
+                      //                 Container(
+                      //                   width: double.infinity,
+                      //                   padding: const EdgeInsets.all(14),
+                      //                   decoration: BoxDecoration(
+                      //                     color: Colors.white10,
+                      //                     borderRadius: BorderRadius.circular(10),
+                      //                   ),
+                      //                   child: Row(
+                      //                     children: [
+                      //                       ClipRRect(
+                      //                         borderRadius: BorderRadius.circular(8),
+                      //                         child: Image.network(
+                      //                           selectedDriver!.service.serviceImage,
+                      //                           height: 60,
+                      //                           width: 80,
+                      //                           fit: BoxFit.cover,
+                      //                           errorBuilder: (_, __, ___) => Image.asset(
+                      //                             'assets/images/privet_car.png',
+                      //                             height: 60,
+                      //                             width: 80,
+                      //                             fit: BoxFit.cover,
+                      //                           ),
+                      //                         ),
+                      //                       ),
+                      //                       const SizedBox(width: 12),
+                      //                       Expanded(
+                      //                         child: Column(
+                      //                           crossAxisAlignment: CrossAxisAlignment.start,
+                      //                           children: [
+                      //                             Text(
+                      //                               selectedDriver!.service.name,
+                      //                               style: const TextStyle(
+                      //                                 color: Colors.white,
+                      //                                 fontSize: 16,
+                      //                                 fontWeight: FontWeight.bold,
+                      //                               ),
+                      //                             ),
+                      //                             Text(
+                      //                               "${selectedDriver!.vehicle.taxiName} • Plate ${selectedDriver!.vehicle.plateNumber}",
+                      //                               style: const TextStyle(
+                      //                                 color: Colors.grey,
+                      //                                 fontSize: 13,
+                      //                               ),
+                      //                             ),
+                      //                             const SizedBox(height: 4),
+                      //                             // 👉 THIS PART: COMMENT OUT / DELETE
+                      // Obx(() {
+                      //   if (locationController
+                      //               .destinationLocation.value !=
+                      //           null &&
+                      //       locationController.distance.value > 0) {
+                      //     return Text(
+                      //       '${locationController.distance.value.toStringAsFixed(1)} miles',
+                      //       style: TextStyle(
+                      //         color: Colors.white,
+                      //         fontSize: 15,
+                      //       ),
+                      //     );
+                      //   }
+                      //   return SizedBox.shrink();
+                      // }),
+                      //                           ],
+                      //                         ),
+                      //                       ),
+                      //                       Text(
+                      //                         "${selectedDriver!.service.estimatedArrivalTime} min",
+                      //                         style: const TextStyle(
+                      //                           color: Colors.white,
+                      //                           fontSize: 14,
+                      //                         ),
+                      //                       ),
+                      //                     ],
+                      //                   ),
+                      //                 ),
                       SizedBox(height: 12),
-                      // Confirm Location Button
 
+                      // Confirm Location Button
                       WideCustomButton(
                         text: 'Confirm Location',
                         isLoading: appController.isLoading.value,
@@ -766,7 +763,6 @@ class ConfirmYourLocationScreen extends StatelessWidget {
 //               ),
 //             ),
 
-
 //             // CONFIRM YOUR LOCATION BOTTOM SHEET
 //             Positioned(
 //               bottom: 0,
@@ -909,7 +905,7 @@ class ConfirmYourLocationScreen extends StatelessWidget {
 //                                   // Only show distance if destination is set and distance is calculated
 //                                   if (locationController.destinationLocation.value != null && locationController.distance.value > 0) {
 //                                     return Text(
-//                                       '${locationController.distance.value.toStringAsFixed(1)}km',
+//                                       '${locationController.distance.value.toStringAsFixed(1)} miles',
 //                                       style: TextStyle(color: Colors.white, fontSize: 15),
 //                                     );
 //                                   }
