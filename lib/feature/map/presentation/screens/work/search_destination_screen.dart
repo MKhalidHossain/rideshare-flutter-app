@@ -377,10 +377,7 @@ class _SearchDestinationScreenState extends State<SearchDestinationScreen> {
 
           if (isSearchMode)
             if (isSearching)
-              Padding(
-                padding: EdgeInsets.all(16),
-                child: _buildSearchShimmer(),
-              )
+              Padding(padding: EdgeInsets.all(16), child: _buildSearchShimmer())
             else
               Expanded(
                 child: Obx(() {
@@ -602,7 +599,7 @@ class _SearchDestinationScreenState extends State<SearchDestinationScreen> {
               builder: (context, snapshot) {
                 if (snapshot.hasData && snapshot.data! > 0) {
                   return Text(
-                    "${snapshot.data!.toStringAsFixed(1)}Miles",
+                    "${snapshot.data!.toStringAsFixed(1)} Miles",
                     style: TextStyle(color: Colors.white),
                   );
                 }
@@ -681,7 +678,6 @@ class _SearchDestinationScreenState extends State<SearchDestinationScreen> {
 // class SearchDestinationScreen extends StatefulWidget {
 //   final ScrollController? scrollController;
 
-
 //   const SearchDestinationScreen({super.key, this.scrollController});
 
 //   @override
@@ -693,7 +689,6 @@ class _SearchDestinationScreenState extends State<SearchDestinationScreen> {
 //   final LocationController locationController = Get.find<LocationController>();
 //   final AppController appController = Get.find<AppController>();
 //   final LocationPickedController locationPickedController = LocationPickedController();
-
 
 //   final TextEditingController searchTextController = TextEditingController();
 //   final FocusNode searchFocusNode = FocusNode();
@@ -899,7 +894,7 @@ class _SearchDestinationScreenState extends State<SearchDestinationScreen> {
 //                 ],
 //               ),
 //             ),
-//             Text("2.7km", style: TextStyle(color: Colors.white)),
+//             Text("2.7 miles", style: TextStyle(color: Colors.white)),
 //           ],
 //         ),
 //       ),

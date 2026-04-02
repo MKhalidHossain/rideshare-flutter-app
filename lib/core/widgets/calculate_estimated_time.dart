@@ -33,8 +33,9 @@ class EstimatedTripInfo extends StatelessWidget {
   });
 
   String _calculateEstimatedTime(double distanceMile) {
-    // Assuming average speed of 30 mile/h in city
-    final double hours = distanceMile / 30;
+    // Assuming average city speed of about 18.6 mph
+    const double averageCitySpeedMph = 18.6;
+    final double hours = distanceMile / averageCitySpeedMph;
     final int minutes = (hours * 60).round();
 
     if (minutes < 1) {
@@ -54,7 +55,7 @@ class EstimatedTripInfo extends StatelessWidget {
     num? perMileRate,
     num? minimumFare,
   }) {
-    // Base fare + per km rate with graceful defaults
+    // Base fare + per-mile rate with graceful defaults
     final double resolvedBaseFare = (baseFare ?? 5).toDouble();
     final double resolvedPerMileRate = (perMileRate ?? 2.5).toDouble();
     double price = resolvedBaseFare + (distanceMile * resolvedPerMileRate);
@@ -79,11 +80,11 @@ class EstimatedTripInfo extends StatelessWidget {
 
     final TextStyle effectiveLabelStyle =
         labelStyle ?? Theme.of(context).textTheme.bodyMedium!;
-    final TextStyle effectiveValueStyle = valueStyle ??
-        Theme.of(context)
-            .textTheme
-            .bodyLarge!
-            .copyWith(fontWeight: FontWeight.bold);
+    final TextStyle effectiveValueStyle =
+        valueStyle ??
+        Theme.of(
+          context,
+        ).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold);
 
     return Padding(
       padding: padding,

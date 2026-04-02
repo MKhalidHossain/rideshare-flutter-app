@@ -522,9 +522,9 @@ class _RideConfirmedScreenState extends State<RideConfirmedScreen> {
     }
     final service = widget.selectedDriver!.service;
     final distance = locationController.distance.value;
+    final perMileRate = service?.effectivePerMileRate ?? 0.00;
     double price =
-        (service?.baseFare.toDouble() ?? 0.00) +
-        (distance * (service?.perKmRate.toDouble() ?? 0.00));
+        (service?.baseFare.toDouble() ?? 0.00) + (distance * perMileRate);
     if ((service?.minimumFare ?? 0) > 0 &&
         price < (service?.minimumFare ?? 0)) {
       price = service?.minimumFare.toDouble() ?? 0.00;
