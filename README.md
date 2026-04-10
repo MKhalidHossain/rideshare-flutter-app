@@ -144,7 +144,7 @@ flutter pub run flutter_launcher_icons
 - Dependency injection setup: `lib/helpers/dependency_injection.dart`
 - Feature structure example: `lib/feature/auth/` with controllers, repositories, services, and presentation
 
-## Testing
+## Testing 
 
 ```bash
 flutter test
