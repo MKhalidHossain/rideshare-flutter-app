@@ -1,50 +1,113 @@
 # RidezToHealth
 
-RidezToHealth is a Flutter mobile app built around ride and transportation workflows with onboarding, authentication, mapping, services, payments, and profile/history flows. The codebase uses GetX for dependency injection and state, a feature-first layout, and a layered services/repository approach to keep UI, business logic, and data access cleanly separated.
+A production-oriented Flutter mobile application for ride booking and transportation workflows, featuring onboarding, authentication, service discovery, maps and routing, payments, and profile/history management.
+
+<p align="center">
+  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-Mobile_App-02569B?logo=flutter&logoColor=white">
+  <img alt="Dart" src="https://img.shields.io/badge/Dart-%5E3.8.1-0175C2?logo=dart&logoColor=white">
+  <img alt="Platform" src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS-0A0A0A">
+  <img alt="Architecture" src="https://img.shields.io/badge/Architecture-GetX%20%2B%20Repositories%20%2B%20Services-6A1B9A">
+  <img alt="Version" src="https://img.shields.io/badge/Version-1.0.1%2B2-success">
+</p>
+
+---
 
 ## Overview
 
-- App name: RidezToHealth
-- Platforms: iOS, Android (Flutter)
-- SDK: Flutter with Dart `^3.8.1`
-- Version: `1.0.1+2`
-- Architecture: Feature-first, GetX controllers + repositories + services
+**RidezToHealth** is a Flutter-based transportation app designed around ride discovery and booking workflows. The project follows a feature-first structure with **GetX** for navigation, state management, and dependency injection, while repositories and services help separate UI concerns from networking and business logic.
 
-## Key Features
+### Project Summary
 
-- Onboarding flow and first-time install checks
-- Authentication with login, register, OTP, and password reset
-- Home dashboard and service discovery
-- Maps, routing, geolocation, and place search
-- Real-time updates via Socket.IO
-- Profile management and trip/history views
-- Payments and wallet-related screens
-- Local storage for tokens and user info
-- Media handling with image and file pickers
+- **App Name:** RidezToHealth
+- **Framework:** Flutter
+- **Language:** Dart `^3.8.1`
+- **Platforms:** Android, iOS
+- **Version:** `1.0.1+2`
+- **Architecture Style:** Feature-first + GetX + layered repositories/services
 
-## Screenshots
+---
 
-Place screenshots in `docs/screenshots/` using the filenames below.
+## Links
 
-| Screen | Preview |
-| --- | --- |
-| Home | ![Home](docs/screenshots/home.png) |
-| Home (Recent Trips) | ![Home Recent Trips](docs/screenshots/home_recent_trips.png) |
-| Services | ![Services](docs/screenshots/services.png) |
-| Search Destination | ![Search Destination](docs/screenshots/search_destination.png) |
-| History | ![History](docs/screenshots/history.png) |
-| Notifications | ![Notifications](docs/screenshots/notifications.png) |
-| Profile Menu | ![Profile Menu](docs/screenshots/profile_menu.png) |
-| Edit Profile | ![Edit Profile](docs/screenshots/profile_edit.png) |
+### Design
 
-## App Flow
+- [Open Figma File](https://figma.com/design/ZR49xOiUxz9xfC0CaRGO7h/rideztohealth--Final-Copy-?t=nUuLZyRfdywHq5no-0)
+
+### Store Links
+
+| App | Google Play | App Store |
+| --- | --- | --- |
+| RidezToHealth | [Open](https://play.google.com/store/apps/details?id=com.rideztransportation.rideztohealth&pcampaignid=web_share) | [Open](http://apps.apple.com/us/app/rideztohealth/id6756919658) |
+| RidezToHealth Driver | [Open](https://play.google.com/store/apps/details?id=com.rideztransportation.ridetohealthdriver&pcampaignid=web_share) | [Open](http://apps.apple.com/us/app/ridetohealth-driver/id6756962378) |
+
+---
+
+## Core Features
+
+### User Experience
+- First-time install detection and onboarding flow
+- Clean authentication journey with login, registration, OTP verification, and password reset
+- Home dashboard for ride-related discovery and app entry points
+- Profile editing and account-related flows
+- Trip and activity history views
+- Notification and menu-based settings experience
+
+### Transportation & Ride Flows
+- Destination search and service selection
+- Maps integration with location access and route support
+- Ride request and transportation journey flow
+- Service browsing and service-specific interactions
+- Payment handling and wallet-related experiences
+
+### Platform & System Capabilities
+- Real-time communication through Socket.IO
+- Token and local user data persistence
+- Image and file picking support
+- Embedded web content support where required
+- Modular structure for scalable feature development
+
+---
+
+## Tech Stack
+
+### State Management & Navigation
+- `get`
+
+### Networking & Realtime
+- `dio`
+- `http`
+- `socket_io_client`
+
+### Storage
+- `shared_preferences`
+- `get_storage`
+
+### Maps & Location
+- `google_maps_flutter`
+- `geolocator`
+- `location`
+- `geocoding`
+- `flutter_polyline_points`
+
+### UI & Media
+- `cached_network_image`
+- `shimmer`
+- `flutter_svg`
+- `image_picker`
+- `file_picker`
+- `webview_flutter`
+- `intl`
+
+---
+
+## Application Flow
 
 ```mermaid
 flowchart TD
   A[App Launch] --> B{First Time Install?}
   B -- Yes --> C[Onboarding]
-  C --> D[Auth]
-  B -- No --> E{Logged In?}
+  C --> D[Authentication]
+  B -- No --> E{User Logged In?}
   E -- Yes --> F[Main App]
   E -- No --> D
   D --> F
@@ -60,96 +123,103 @@ flowchart TD
   J --> O[Edit Profile]
 ```
 
+---
+
 ## Architecture
 
-- State and dependency management: GetX (`get`)
-- Navigation: `GetMaterialApp` and a custom bottom navigation bar
-- Feature modules: Each feature groups domain, data, controllers, and UI
-- Remote data access: `ApiClient` + `SocketClient` under `lib/helpers/remote/`
-- Local storage: `SharedPreferences` and `get_storage`
+The project uses a layered and maintainable Flutter structure:
+
+### Architectural Principles
+- **Feature-first organization** keeps modules grouped by business capability
+- **GetX** manages navigation, controllers, and dependency injection
+- **Repository and service layers** isolate network/data concerns from UI code
+- **Reusable core and helper modules** centralize constants, utilities, and shared widgets
+- **Remote and local data sources** support persistent sessions and real-time updates
+
+### Main Building Blocks
+- **Presentation Layer:** Flutter screens, widgets, and GetX controllers
+- **Business Logic Layer:** Controllers and repositories that coordinate use cases
+- **Data Layer:** Services, remote clients, and local persistence helpers
+- **Infrastructure Layer:** App constants, themes, utilities, DI, and socket/API clients
+
+### Remote & Local Access
+- Remote communication is handled through `ApiClient` and `SocketClient`
+- Local persistence uses `SharedPreferences` and `get_storage`
+
+---
 
 ## Project Structure
 
-```
+```text
 lib/
-  main.dart                         # App entry point, DI, initial routing
-  app.dart                          # Main shell with bottom navigation
-  core/                             # Shared constants, themes, widgets, utils, onboarding
+  main.dart                         # App entry point, DI bootstrap, initial routing
+  app.dart                          # Main shell and bottom navigation setup
+  core/                             # Shared constants, themes, widgets, onboarding, utilities
   feature/                          # Feature modules
-    auth/                           # Auth controllers, services, repos, UI
-    home/                           # Home feature
-    map/                            # Maps, location, routing
-    payment/                        # Payment feature
-    profileAndHistory/              # Profile and history feature
-    serviceFeature/                 # Service list/details
-  helpers/                          # DI, API client, socket client
-  navigation/                       # Navigation widgets
-  utils/                            # App-wide constants and helpers
+    auth/                           # Authentication flows and logic
+    home/                           # Home dashboard and primary user flows
+    map/                            # Maps, routing, and geolocation logic
+    payment/                        # Payment-related UI and logic
+    profileAndHistory/              # Profile management and ride/trip history
+    serviceFeature/                 # Service discovery and service details
+  helpers/                          # Dependency injection, API client, socket client
+  navigation/                       # Navigation widgets/components
+  utils/                            # App-wide helpers, constants, and utility logic
 assets/
-  images/                           # Images
-  icons/                            # Icons
+  images/                           # Image assets
+  icons/                            # Icon assets
+  fonts/                            # Custom fonts referenced by pubspec.yaml
 ```
 
-## Dependencies
+---
 
-- `get` for state, navigation, and DI
-- `dio` and `http` for networking
-- `socket_io_client` for real-time updates
-- `shared_preferences` and `get_storage` for local persistence
-- `google_maps_flutter`, `geolocator`, `location`, `geocoding`, `flutter_polyline_points` for map and location features
-- `image_picker` and `file_picker` for media/files
-- `cached_network_image`, `shimmer`, `flutter_svg` for UI
-- `webview_flutter` for embedded web content
-- `intl` for formatting
+## Screenshots
 
-## Getting Started
+The following app screenshots are included in `docs/screenshots/`.
 
-1. Install dependencies:
-   ```bash
-   flutter pub get
-   ```
+<table>
+  <tr>
+    <td align="center"><strong>Onboarding Location Permission</strong><br><img src="docs/screenshots/onboarding_location_permission.png" alt="Onboarding Location Permission" width="240"></td>
+    <td align="center"><strong>Login</strong><br><img src="docs/screenshots/login.png" alt="Login" width="240"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Home</strong><br><img src="docs/screenshots/home.png" alt="Home" width="240"></td>
+    <td align="center"><strong>Profile Menu</strong><br><img src="docs/screenshots/profile_menu.png" alt="Profile Menu" width="240"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Search Destination</strong><br><img src="docs/screenshots/search_destination.png" alt="Search Destination" width="240"></td>
+    <td align="center"><strong>Search Destination Android</strong><br><img src="docs/screenshots/search_destination_android.png" alt="Search Destination Android" width="240"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Finding Driver</strong><br><img src="docs/screenshots/finding_driver.png" alt="Finding Driver" width="240"></td>
+    <td align="center"><strong>Driver Chat</strong><br><img src="docs/screenshots/driver_chat.png" alt="Driver Chat" width="240"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Edit Profile</strong><br><img src="docs/screenshots/profile_edit.png" alt="Edit Profile" width="240"></td>
+    <td align="center"><strong>Notifications</strong><br><img src="docs/screenshots/notifications.png" alt="Notifications" width="240"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Set Ride</strong><br><img src="docs/screenshots/set_ride.png" alt="Set Ride" width="240"></td>
+    <td></td>
+  </tr>
+</table>
 
-2. Configure API and Socket URLs:
-   - Edit `lib/core/constants/urls.dart` for `baseUrl` and `socketUrl`.
 
-3. Configure Maps API key:
-   - Update `lib/utils/app_constants.dart` for `polylineMapKey`.
-   - Add the same key to your Android and iOS platform configs.
+---
 
-4. Run the app:
-   ```bash
-   flutter run
-   ```
+## Prerequisites
 
-## Configuration Notes
+Before running the app, ensure your environment includes:
 
-- Base URLs: `lib/core/constants/urls.dart`
-- App constants and keys: `lib/utils/app_constants.dart`
-- Launcher icons: `pubspec.yaml` under `flutter_launcher_icons`
+- Flutter SDK installed and configured
+- Dart SDK compatible with the project
+- Android Studio or VS Code with Flutter extensions
+- Android SDK / Xcode toolchain configured
+- A physical device or emulator/simulator
+- Valid API endpoints and map credentials
 
-To regenerate launcher icons:
-```bash
-flutter pub run flutter_launcher_icons
-```
-
-## Assets and Fonts
-
-- Images: `assets/images/`
-- Icons: `assets/icons/`
-- Fonts: `assets/fonts/notoSansKR/` configured under `pubspec.yaml`
-
-## Development Tips
-
-- Entry points: `lib/main.dart`, `lib/app.dart`
-- Dependency injection setup: `lib/helpers/dependency_injection.dart`
-- Feature structure example: `lib/feature/auth/` with controllers, repositories, services, and presentation
-
-## Testing 
+Check your Flutter environment:
 
 ```bash
-flutter test
+flutter doctor
 ```
-
-## Security and Secrets
-
-Do not commit real API keys or production credentials. Move sensitive values to secure configs or environment-specific builds.
