@@ -12,7 +12,7 @@ A production-oriented Flutter mobile application for ride booking and transporta
 
 ---
 
-## Overview
+## Overview 
 
 **RidezToHealth** is a Flutter-based transportation app designed around ride discovery and booking workflows. The project follows a feature-first structure with **GetX** for navigation, state management, and dependency injection, while repositories and services help separate UI concerns from networking and business logic.
 
@@ -223,3 +223,4 @@ Check your Flutter environment:
 ```bash
 flutter doctor
 ```
+
