@@ -2,14 +2,6 @@
 
 A production-oriented Flutter mobile application for ride booking and transportation workflows, featuring onboarding, authentication, service discovery, maps and routing, payments, and profile/history management.
 
-<p align="center">
-  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-Mobile_App-02569B?logo=flutter&logoColor=white">
-  <img alt="Dart" src="https://img.shields.io/badge/Dart-%5E3.8.1-0175C2?logo=dart&logoColor=white">
-  <img alt="Platform" src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS-0A0A0A">
-  <img alt="Architecture" src="https://img.shields.io/badge/Architecture-GetX%20%2B%20Repositories%20%2B%20Services-6A1B9A">
-  <img alt="Version" src="https://img.shields.io/badge/Version-1.0.1%2B2-success">
-</p>
-
 ---
 
 ## Overview
@@ -24,6 +16,21 @@ A production-oriented Flutter mobile application for ride booking and transporta
 - **Platforms:** Android, iOS
 - **Version:** `1.0.1+2`
 - **Architecture Style:** Feature-first + GetX + layered repositories/services
+
+---
+
+## Links
+
+### Design
+
+- [Open Figma File](https://figma.com/design/ZR49xOiUxz9xfC0CaRGO7h/rideztohealth--Final-Copy-?t=nUuLZyRfdywHq5no-0)
+
+### Store Links
+
+| App | Google Play | App Store |
+| --- | --- | --- |
+| RidezToHealth | [Open](https://play.google.com/store/apps/details?id=com.rideztransportation.rideztohealth&pcampaignid=web_share) | [Open](http://apps.apple.com/us/app/rideztohealth/id6756919658) |
+| RidezToHealth Driver | [Open](https://play.google.com/store/apps/details?id=com.rideztransportation.ridetohealthdriver&pcampaignid=web_share) | [Open](http://apps.apple.com/us/app/ridetohealth-driver/id6756962378) |
 
 ---
 
@@ -160,20 +167,35 @@ assets/
 
 ## Screenshots
 
-Store screenshots in `docs/screenshots/` using the following file names.
+The following app screenshots are included in `docs/screenshots/`.
 
-| Screen | Preview |
-| --- | --- |
-| Home | ![Home](docs/screenshots/home.png) |
-| Home (Recent Trips) | ![Home Recent Trips](docs/screenshots/home_recent_trips.png) |
-| Services | ![Services](docs/screenshots/services.png) |
-| Search Destination | ![Search Destination](docs/screenshots/search_destination.png) |
-| History | ![History](docs/screenshots/history.png) |
-| Notifications | ![Notifications](docs/screenshots/notifications.png) |
-| Profile Menu | ![Profile Menu](docs/screenshots/profile_menu.png) |
-| Edit Profile | ![Edit Profile](docs/screenshots/profile_edit.png) |
+<table>
+  <tr>
+    <td align="center"><strong>Onboarding Location Permission</strong><br><img src="docs/screenshots/onboarding_location_permission.png" alt="Onboarding Location Permission" width="240"></td>
+    <td align="center"><strong>Login</strong><br><img src="docs/screenshots/login.png" alt="Login" width="240"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Home</strong><br><img src="docs/screenshots/home.png" alt="Home" width="240"></td>
+    <td align="center"><strong>Profile Menu</strong><br><img src="docs/screenshots/profile_menu.png" alt="Profile Menu" width="240"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Search Destination</strong><br><img src="docs/screenshots/search_destination.png" alt="Search Destination" width="240"></td>
+    <td align="center"><strong>Search Destination Android</strong><br><img src="docs/screenshots/search_destination_android.png" alt="Search Destination Android" width="240"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Finding Driver</strong><br><img src="docs/screenshots/finding_driver.png" alt="Finding Driver" width="240"></td>
+    <td align="center"><strong>Driver Chat</strong><br><img src="docs/screenshots/driver_chat.png" alt="Driver Chat" width="240"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Edit Profile</strong><br><img src="docs/screenshots/profile_edit.png" alt="Edit Profile" width="240"></td>
+    <td align="center"><strong>Notifications</strong><br><img src="docs/screenshots/notifications.png" alt="Notifications" width="240"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Set Ride</strong><br><img src="docs/screenshots/set_ride.png" alt="Set Ride" width="240"></td>
+    <td></td>
+  </tr>
+</table>
 
-> Tip: add compressed screenshots with consistent dimensions for a cleaner GitHub presentation.
 
 ---
 
