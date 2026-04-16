@@ -2,6 +2,14 @@
 
 A production-oriented Flutter mobile application for ride booking and transportation workflows, featuring onboarding, authentication, service discovery, maps and routing, payments, and profile/history management.
 
+<p align="center">
+  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-Mobile_App-02569B?logo=flutter&logoColor=white">
+  <img alt="Dart" src="https://img.shields.io/badge/Dart-%5E3.8.1-0175C2?logo=dart&logoColor=white">
+  <img alt="Platform" src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS-0A0A0A">
+  <img alt="Architecture" src="https://img.shields.io/badge/Architecture-GetX%20%2B%20Repositories%20%2B%20Services-6A1B9A">
+  <img alt="Version" src="https://img.shields.io/badge/Version-1.0.1%2B2-success">
+</p>
+
 ---
 
 ## Overview
