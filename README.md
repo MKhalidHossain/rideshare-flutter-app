@@ -31,7 +31,7 @@
   </tr>
 </table>
 
-## APK & App Download
+## App Download
 
 <p align="center">
   <a href="https://play.google.com/store/apps/details?id=com.rideztransportation.rideztohealth&pcampaignid=web_share">
