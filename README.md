@@ -1,29 +1,51 @@
 # RidezToHealth
 
-A production-oriented Flutter mobile application for ride booking and transportation workflows, featuring onboarding, authentication, service discovery, maps and routing, payments, and profile/history management.
+<p align="center">
+  <img src="assets/images/logo.png" alt="RidezToHealth Logo" width="120">
+</p>
+
+<p align="center">
+  A professional Flutter ride-booking application focused on transportation, routing, ride requests, payments, and account management.
+</p>
 
 <p align="center">
   <img alt="Flutter" src="https://img.shields.io/badge/Flutter-Mobile_App-02569B?logo=flutter&logoColor=white">
-  <img alt="Dart" src="https://img.shields.io/badge/Dart-%5E3.8.1-0175C2?logo=dart&logoColor=white">
+  <img alt="Dart" src="https://img.shields.io/badge/Dart-3.8.1-0175C2?logo=dart&logoColor=white">
   <img alt="Platform" src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS-0A0A0A">
-  <img alt="Architecture" src="https://img.shields.io/badge/Architecture-GetX%20%2B%20Repositories%20%2B%20Services-6A1B9A">
+  <img alt="Architecture" src="https://img.shields.io/badge/Architecture-GetX%20%2B%20Services-6A1B9A">
   <img alt="Version" src="https://img.shields.io/badge/Version-1.0.1%2B2-success">
 </p>
 
----
+## App Preview
 
-## Overview 
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/onboarding_location_permission.png" alt="Onboarding" width="220"></td>
+    <td align="center"><img src="docs/screenshots/login.png" alt="Login" width="220"></td>
+    <td align="center"><img src="docs/screenshots/home.png" alt="Home" width="220"></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/search_destination.png" alt="Search Destination" width="220"></td>
+    <td align="center"><img src="docs/screenshots/set_ride.png" alt="Set Ride" width="220"></td>
+    <td align="center"><img src="docs/screenshots/profile_edit.png" alt="Edit Profile" width="220"></td>
+  </tr>
+</table>
 
-**RidezToHealth** is a Flutter-based transportation app designed around ride discovery and booking workflows. The project follows a feature-first structure with **GetX** for navigation, state management, and dependency injection, while repositories and services help separate UI concerns from networking and business logic.
+## APK & App Download
 
-### Project Summary
+<p align="center">
+  <a href="https://play.google.com/store/apps/details?id=com.rideztransportation.rideztohealth&pcampaignid=web_share">
+    <img alt="Download Android App" src="https://img.shields.io/badge/Download-Android_App-34A853?style=for-the-badge&logo=googleplay&logoColor=white">
+  </a>
+  <a href="https://apps.apple.com/us/app/rideztohealth/id6756919658">
+    <img alt="Download on the App Store" src="https://img.shields.io/badge/Download-App_Store-0D0D0D?style=for-the-badge&logo=apple&logoColor=white">
+  </a>
+</p>
 
-- **App Name:** RidezToHealth
-- **Framework:** Flutter
-- **Language:** Dart `^3.8.1`
-- **Platforms:** Android, iOS
-- **Version:** `1.0.1+2`
-- **Architecture Style:** Feature-first + GetX + layered repositories/services
+<p align="center">
+  <strong>Primary APK / Android access:</strong>
+  <a href="https://play.google.com/store/apps/details?id=com.rideztransportation.rideztohealth&pcampaignid=web_share">Get RidezToHealth on Google Play</a>
+</p>
 
 ---
 
