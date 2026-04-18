@@ -19,6 +19,7 @@
 ---
 
 ## App Preview
+<br>
 
 <table>
   <tr>
