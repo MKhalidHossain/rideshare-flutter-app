@@ -16,20 +16,35 @@
   <img alt="Version" src="https://img.shields.io/badge/Version-1.0.1%2B2-success">
 </p>
 
+---
+
 ## App Preview
 
 <table>
   <tr>
-    <td align="center"><img src="docs/screenshots/onboarding_location_permission.png" alt="Onboarding" width="220"></td>
-    <td align="center"><img src="docs/screenshots/login.png" alt="Login" width="220"></td>
-    <td align="center"><img src="docs/screenshots/home.png" alt="Home" width="220"></td>
+    <td align="center"><strong>Onboarding Location Permission</strong><br><img src="docs/screenshots/onboarding_location_permission.png" alt="Onboarding Location Permission" width="240"></td>
+    <td align="center"><strong>Login</strong><br><img src="docs/screenshots/login.png" alt="Login" width="240"></td>
+    <td align="center"><strong>Home</strong><br><img src="docs/screenshots/home.png" alt="Home" width="240"></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/screenshots/search_destination.png" alt="Search Destination" width="220"></td>
-    <td align="center"><img src="docs/screenshots/set_ride.png" alt="Set Ride" width="220"></td>
-    <td align="center"><img src="docs/screenshots/profile_edit.png" alt="Edit Profile" width="220"></td>
+    <td align="center"><strong>Search Destination</strong><br><img src="docs/screenshots/search_destination.png" alt="Search Destination" width="240"></td>
+    <td align="center"><strong>Search Destination Android</strong><br><img src="docs/screenshots/search_destination_android.png" alt="Search Destination Android" width="240"></td>
+    <td align="center"><strong>Set Ride</strong><br><img src="docs/screenshots/set_ride.png" alt="Set Ride" width="240"></td>
   </tr>
+  <tr>
+    <td align="center"><strong>Finding Driver</strong><br><img src="docs/screenshots/finding_driver.png" alt="Finding Driver" width="240"></td>
+    <td align="center"><strong>Driver Chat</strong><br><img src="docs/screenshots/driver_chat.png" alt="Driver Chat" width="240"></td>
+    <td align="center"><strong>Notifications</strong><br><img src="docs/screenshots/notifications.png" alt="Notifications" width="240"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Profile Menu</strong><br><img src="docs/screenshots/profile_menu.png" alt="Profile Menu" width="240"></td>
+    <td align="center"><strong>Edit Profile</strong><br><img src="docs/screenshots/profile_edit.png" alt="Edit Profile" width="240"></td>
+  </tr>
+  
 </table>
+
+
+---
 
 ## App Download
 
@@ -192,36 +207,6 @@ assets/
   icons/                            # Icon assets
   fonts/                            # Custom fonts referenced by pubspec.yaml
 ```
-
----
-
-## Screenshots
-
-The following app screenshots are included in `docs/screenshots/`.
-
-<table>
-  <tr>
-    <td align="center"><strong>Onboarding Location Permission</strong><br><img src="docs/screenshots/onboarding_location_permission.png" alt="Onboarding Location Permission" width="240"></td>
-    <td align="center"><strong>Login</strong><br><img src="docs/screenshots/login.png" alt="Login" width="240"></td>
-    <td align="center"><strong>Home</strong><br><img src="docs/screenshots/home.png" alt="Home" width="240"></td>
-  </tr>
-  <tr>
-    <td align="center"><strong>Search Destination</strong><br><img src="docs/screenshots/search_destination.png" alt="Search Destination" width="240"></td>
-    <td align="center"><strong>Search Destination Android</strong><br><img src="docs/screenshots/search_destination_android.png" alt="Search Destination Android" width="240"></td>
-    <td align="center"><strong>Set Ride</strong><br><img src="docs/screenshots/set_ride.png" alt="Set Ride" width="240"></td>
-  </tr>
-  <tr>
-    <td align="center"><strong>Finding Driver</strong><br><img src="docs/screenshots/finding_driver.png" alt="Finding Driver" width="240"></td>
-    <td align="center"><strong>Driver Chat</strong><br><img src="docs/screenshots/driver_chat.png" alt="Driver Chat" width="240"></td>
-    <td align="center"><strong>Notifications</strong><br><img src="docs/screenshots/notifications.png" alt="Notifications" width="240"></td>
-  </tr>
-  <tr>
-    <td align="center"><strong>Profile Menu</strong><br><img src="docs/screenshots/profile_menu.png" alt="Profile Menu" width="240"></td>
-    <td align="center"><strong>Edit Profile</strong><br><img src="docs/screenshots/profile_edit.png" alt="Edit Profile" width="240"></td>
-  </tr>
-  
-</table>
-
 
 ---
 
