@@ -44,13 +44,6 @@ class MyApp extends StatelessWidget {
       initialBinding: InitialBinding(),
       debugShowCheckedModeBanner: false,
       home: const AppMain(),
-
-      // whichPageToNext(),
-      //MapScreenTest(),
-      // SearchDestinationScreen(),
-      // RideConfirmedScreen(),
-      // AppMain(),
-      // SplashScreen(nextScreen: Onboarding1()),
     );
   }
 }

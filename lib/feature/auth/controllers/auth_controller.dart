@@ -283,24 +283,6 @@ class AuthController extends GetxController implements GetxService {
       showCustomSnackBar('Welcome you have successfully Logged In');
 
       _loginFailCount = 0;
-      _isLoading = false;
-<<<<<<< HEAD
-    } else if (response.statusCode == 202) {
-      if (response.body['data']['is_phone_verified'] == 0) {}
-    } else if (response.statusCode == 400) {
-      Get.offAll(UserSignupScreen());
-      showCustomSnackBar('Sorry you have no account, please create a account');
-    } else if (response.statusCode == 401) {
-      Get.offAll(UserSignupScreen());
-      showCustomSnackBar(
-        'Login Failed',
-        subMessage:
-            'The email or password you entered is incorrect. Please try again.',
-      );
-    } else {
-      _isLoading = false;
-      ApiChecker.checkApi(response);
-=======
     } else {
       _loginFailCount++;
       if (_loginFailCount >= _maxLoginAttempts) {
@@ -313,13 +295,14 @@ class AuthController extends GetxController implements GetxService {
         );
         return;
       }
+
       if (response.statusCode == 202) {
         if (response.body['data']['is_phone_verified'] == 0) {}
       } else if (response.statusCode == 400) {
-        showCustomSnackBar(
-          'Sorry you have no account, please create a account',
-        );
+        Get.offAll(UserSignupScreen());
+        showCustomSnackBar('Sorry you have no account, please create a account');
       } else if (response.statusCode == 401) {
+        Get.offAll(UserSignupScreen());
         showCustomSnackBar(
           'Login Failed',
           subMessage:
@@ -328,7 +311,6 @@ class AuthController extends GetxController implements GetxService {
       } else {
         ApiChecker.checkApi(response);
       }
->>>>>>> 0fb519b7496d711f5d72b0f698bb905c55920f7e
     }
 
     _isLoading = false;
