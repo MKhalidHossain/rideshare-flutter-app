@@ -216,7 +216,6 @@ class _EditProfileState extends State<EditProfile> {
 
                                                         if (imageUrl == null ||
                                                             imageUrl.isEmpty) {
-                                                          // Fallback placeholder if no profile image
                                                           return Center(
                                                             child: Icon(
                                                               Icons
@@ -242,8 +241,6 @@ class _EditProfileState extends State<EditProfile> {
                                                                 if (loadingProgress ==
                                                                     null)
                                                                   return child;
-
-                                                                // Shimmer effect while loading
                                                                 return const ShimmerSkeleton(
                                                                   child: SizedBox(
                                                                     width: 170,
@@ -562,7 +559,7 @@ Widget _buildCustomTextField({
   TextInputType keyboardType = TextInputType.text,
   required String? Function(String?) validator,
   bool obscureText = false,
-  VoidCallback? toggleObscureText,
+  // VoidCallback? toggleObscureText,
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,

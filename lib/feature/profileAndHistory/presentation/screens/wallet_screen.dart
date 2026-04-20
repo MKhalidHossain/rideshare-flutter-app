@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rideztohealth/core/extensions/text_extensions.dart';
 import 'package:rideztohealth/core/widgets/wide_custom_button.dart';
 import 'package:rideztohealth/feature/home/controllers/home_controller.dart';
 import 'package:rideztohealth/feature/home/domain/reponse_model/get_search_destination_for_find_Nearest_drivers_response_model.dart';
@@ -10,7 +9,7 @@ import 'package:rideztohealth/feature/payment/presentation/payment_webview_scree
 import '../../../map/controllers/locaion_controller.dart';
 import '../widgets/payment_method_card.dart';
 import 'add_card_screen.dart';
-import 'add_funds_screen.dart';
+
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({
@@ -61,7 +60,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    // Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: _buildBody(),
     );
@@ -124,87 +123,87 @@ class _WalletScreenState extends State<WalletScreen> {
     );
   }
 
-  Widget _buildBalanceSection() {
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white10,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // SizedBox(height: 40),
-          Text(
-            '\$${balance.toStringAsFixed(0)}',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 48,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            'Rider Cash',
-            style: TextStyle(color: Colors.grey[400], fontSize: 16),
-          ),
-          if (widget.rideAmount != null) ...[
-            SizedBox(height: 12),
-            Divider(color: Colors.white12, height: 1),
-            SizedBox(height: 12),
-            Text(
-              'Ride Fare Due',
-              style: TextStyle(color: Colors.grey[400], fontSize: 14),
-            ),
-            Text(
-              '\$${widget.rideAmount}',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 26,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-          SizedBox(height: 20),
-          SizedBox(
-            width: size.width * 0.5,
-            child: ElevatedButton(
-              onPressed: () {
-                Get.to(
-                  AddFundsScreen(
-                    currentBalance: balance,
-                    onFundsAdded: (amount) {
-                      setState(() {
-                        balance += amount;
-                      });
-                    },
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white12,
-                padding: EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
-                  side: BorderSide(color: Colors.grey[600]!),
-                ),
-                elevation: 0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.add, color: Colors.white, size: 25),
-                  SizedBox(width: 8),
-                  'Add Money'.text18White500(),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildBalanceSection() {
+  //   Size size = MediaQuery.of(context).size;
+  //   return Container(
+  //     width: double.infinity,
+  //     padding: const EdgeInsets.all(16),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white10,
+  //       borderRadius: BorderRadius.circular(8),
+  //     ),
+  //     child: Column(
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: [
+  //         // SizedBox(height: 40),
+  //         Text(
+  //           '\$${balance.toStringAsFixed(0)}',
+  //           style: TextStyle(
+  //             color: Colors.white,
+  //             fontSize: 48,
+  //             fontWeight: FontWeight.bold,
+  //           ),
+  //         ),
+  //         Text(
+  //           'Rider Cash',
+  //           style: TextStyle(color: Colors.grey[400], fontSize: 16),
+  //         ),
+  //         if (widget.rideAmount != null) ...[
+  //           SizedBox(height: 12),
+  //           Divider(color: Colors.white12, height: 1),
+  //           SizedBox(height: 12),
+  //           Text(
+  //             'Ride Fare Due',
+  //             style: TextStyle(color: Colors.grey[400], fontSize: 14),
+  //           ),
+  //           Text(
+  //             '\$${widget.rideAmount}',
+  //             style: TextStyle(
+  //               color: Colors.white,
+  //               fontSize: 26,
+  //               fontWeight: FontWeight.w600,
+  //             ),
+  //           ),
+  //         ],
+  //         SizedBox(height: 20),
+  //         SizedBox(
+  //           width: size.width * 0.5,
+  //           child: ElevatedButton(
+  //             onPressed: () {
+  //               Get.to(
+  //                 AddFundsScreen(
+  //                   currentBalance: balance,
+  //                   onFundsAdded: (amount) {
+  //                     setState(() {
+  //                       balance += amount;
+  //                     });
+  //                   },
+  //                 ),
+  //               );
+  //             },
+  //             style: ElevatedButton.styleFrom(
+  //               backgroundColor: Colors.white12,
+  //               padding: EdgeInsets.symmetric(vertical: 12),
+  //               shape: RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.circular(32),
+  //                 side: BorderSide(color: Colors.grey[600]!),
+  //               ),
+  //               elevation: 0,
+  //             ),
+  //             child: Row(
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //                 Icon(Icons.add, color: Colors.white, size: 25),
+  //                 SizedBox(width: 8),
+  //                 'Add Money'.text18White500(),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildFareSummaryCard() {
     final amount = widget.rideAmount;

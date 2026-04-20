@@ -1,5 +1,4 @@
 
-import 'package:get/get_connect/http/src/response/response.dart';
 import '../domain/models/place_prediction.dart';
 
 abstract class LocationRepositoryInterface {

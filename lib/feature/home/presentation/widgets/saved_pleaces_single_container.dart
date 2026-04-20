@@ -76,13 +76,6 @@ class SavedPlaceSingeContainer extends StatelessWidget {
               ],
             ),
           ),
-          // SmallSemiTranparentButton(
-          //   showIcon: true,
-          //   sufixIcon: Icons.refresh,
-          //   weight: 100,
-          //   text: 'Rebook',
-          //   onPressed: () {},
-          // ),
         ],
       ),
     );

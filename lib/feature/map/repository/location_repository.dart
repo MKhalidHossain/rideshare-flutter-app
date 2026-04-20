@@ -1,14 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:http/http.dart' as http;
 import 'package:rideztohealth/core/constants/app_constant.dart';
 import 'package:rideztohealth/feature/map/domain/models/place_prediction.dart';
 import 'package:rideztohealth/helpers/remote/data/api_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../core/constants/urls.dart';
 import 'location_repository_interface.dart';
 
 class LocationRepository implements LocationRepositoryInterface {

@@ -85,47 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
 
                         const SizedBox(height: 24),
-
-                        //  TextFormField(
-                        //             controller: _emailController,
-                        //             focusNode: _emailFocus,
-                        //             keyboardType: TextInputType.emailAddress,
-                        //             decoration: InputDecoration(
-                        //               prefixIcon: Padding(
-                        //                 padding: EdgeInsets.all(12.0),
-                        //                 child: Image.asset(
-                        //                   'assets/images/email.png',
-                        //                   width: 24,
-                        //                   height: 24,
-                        //                   fit: BoxFit.contain,
-                        //                 ),
-                        //               ),
-                        //               hint: Text(
-                        //                 'Enter your email',
-                        //                 style: TextStyle(
-                        //                   fontSize: 16,
-                        //                   color: Color(0xFFFFFFFF).withOpacity(0.3),
-                        //                 ),
-                        //               ),
-
-                        //               border: OutlineInputBorder(
-                        //                 borderRadius: BorderRadius.circular(10),
-                        //                 borderSide: BorderSide(
-                        //                   color: Colors.grey.shade400,
-                        //                 ),
-                        //               ),
-                        //             ),
-                        //             onFieldSubmitted: (_) =>
-                        //                 FocusScope.of(context).requestFocus(_emailFocus),
-                        //             textInputAction: TextInputAction.done,
-                        //             validator: Validators.email,
-                        //             style: TextStyle(
-                        //               color: AppColors.context(context).textColor,
-                        //               fontSize: 16,
-                        //               fontWeight: FontWeight.w400,
-                        //             ),
-                        //             autofillHints: const [AutofillHints.email],
-                        //           ),
                         GestureDetector(
                           onTap: () {
                             showModalBottomSheet(
@@ -172,27 +131,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     Get.to(SearchDestinationScreen());
-                        //   },
-                        //   child: AbsorbPointer(
-                        //     child: TextField(
-                        //       decoration: InputDecoration(
-                        //         filled: true,
-                        //         fillColor: Colors.white24,
-                        //         hintText: 'Enter Destination',
-                        //         hintStyle: const TextStyle(color: Colors.white54),
-                        //         prefixIcon: const Icon(Icons.search, color: Colors.white),
-                        //         border: OutlineInputBorder(
-                        //           borderRadius: BorderRadius.circular(8),
-                        //           borderSide: BorderSide.none,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
                         const SizedBox(height: 16),
                         _buildSectionTitle('Recent Trips'),
                         const SizedBox(height: 16),
@@ -255,28 +193,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             homeController.getRecentTripsResponseModel,
                           ),
-
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     Get.to(HistoryScreen());
-                        //   },
-                        //   child: SingleActivityContainer(
-                        //     title: 'New York City',
-                        //     subTitle: 'June 25, 07:16 am',
-                        //     price: '\$99.99 USD',
-                        //   ),
-                        // ),
-                        // const SizedBox(height: 16),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     Get.to(HistoryScreen());
-                        //   },
-                        //   child: SingleActivityContainer(
-                        //     title: 'Los Anageles',
-                        //     subTitle: 'June 25, 07:16 am',
-                        //     price: '\$99.99 USD',
-                        //   ),
-                        // ),
                         const SizedBox(height: 16),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -294,14 +210,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-
-                        // Column(
-                        //   children: savedPlaces
-                        //       .map((place) => _buildSavedTile(place))
-                        //       .toList(),
-                        // ),
-
-                        // Saved Places
                         const SizedBox(height: 16),
 
                         if (!isLoggedIn)
@@ -347,77 +255,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                     );
                                   },
                                 ),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     Get.to(SavedPlaceScreen());
-                        //   },
-                        //   child: SavedPlaceSingeContainer(
-                        //     title: 'Mom\'s House',
-                        //     subTitle: '321 Family Rd',
-                        //   ),
-                        // ),
-                        // const SizedBox(height: 16),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     Get.to(SavedPlaceScreen());
-                        //   },
-                        //   child: SavedPlaceSingeContainer(
-                        //     title: 'Airport',
-                        //     subTitle: 'International Terminal',
-                        //   ),
-                        // ),
                         const SizedBox(height: 16),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             _buildSectionTitle('Our Services'),
-                            // TextButton(onPressed: (){}, child: 'See All'.textColorWhite(14)),
                           ],
                         ),
                         const SizedBox(height: 16),
-
-                        // Row(
-                        //   children: [
-                        //    Expanded(child: _buildServiceCard(
-                        //       'Taxi Name',
-
-                        //       'assets/images/texi.png',
-                        //       () {
-                        //         Navigator.push(
-                        //           context,
-                        //           MaterialPageRoute(builder: (_) => const ServiceScreen()),
-                        //         );
-                        //       },
-                        //       size,
-                        //       )),
-                        //     const SizedBox(width: 10),
-                        //      Expanded(child: _buildServiceCard(
-                        //       'Taxi Name',
-
-                        //       'assets/images/texi.png',
-                        //       () {
-                        //         Navigator.push(
-                        //           context,
-                        //           MaterialPageRoute(builder: (_) => const ServiceScreen()),
-                        //         );
-                        //       },
-                        //       size,
-                        //       )),
-                        //     const SizedBox(width: 10),
-                        //     Expanded(child: _buildServiceCard(
-                        //       'Taxi Name',
-
-                        //       'assets/images/texi.png',
-                        //       () {
-                        //         Navigator.push(
-                        //           context,
-                        //           MaterialPageRoute(builder: (_) => const ServiceScreen()),
-                        //         );
-                        //       },
-                        //       size,
-                        //       )),
-                        //   ],
-                        // ),
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
@@ -511,12 +356,6 @@ class _HomeScreenState extends State<HomeScreen> {
     size,
   ) => GestureDetector(
     onTap: onTap,
-    // () {
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(builder: (_) => const ServiceScreen()),
-    //   );
-    // },
     child: Container(
       margin: const EdgeInsets.only(right: 10),
       padding: const EdgeInsets.all(12),
@@ -571,45 +410,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     ),
   );
-
-  // Widget _buildPromoBanner() => Container(
-  //   decoration: BoxDecoration(
-  //     color: Colors.white10,
-  //     borderRadius: BorderRadius.circular(12),
-  //   ),
-  //   child: Row(
-  //     children: [
-  //       Padding(
-  //         padding: const EdgeInsets.all(24.0),
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             const Text(
-  //               'Enjoy 18% off next ride',
-  //               style: TextStyle(
-  //                 color: Colors.white,
-  //                 fontWeight: FontWeight.bold,
-  //               ),
-  //             ),
-  //             const SizedBox(height: 24),
-  //             NormalCustomButton(
-  //               height: 30,
-  //               weight: 100,
-  //               text: 'Book Now',
-  //               onPressed: () {},
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //       const Spacer(),
-  //       Image.asset(
-  //         'assets/images/promoImage.png',
-  //         fit: BoxFit.contain,
-  //         height: 120,
-  //       ),
-  //     ],
-  //   ),
-  // );
 
   Widget _buildLoginPrompt(String message) {
     return Center(

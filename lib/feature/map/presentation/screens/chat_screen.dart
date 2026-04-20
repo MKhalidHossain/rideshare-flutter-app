@@ -54,44 +54,6 @@ class _ChatScreenRTHState extends State<ChatScreenRTH> {
   }
 
 
-  //   void _joinChatRoom() {
-   
-  //    final customerId= widget.rideBookingInfoFromResponse?.notification?.senderId ?? '';
-  //   final driverId = widget.selectedDriver?.driver.userId.id ?? '';// adjust field name
-
-  //   if (driverId == null || customerId == null) return;
-
-  //   // Save participants in controller (for sendMessage)
-  //   chatController.setParticipants(
-  //     senderId: customerId ,
-  //     receiverId: driverId,
-  //   );
-
-  //   socketClient.emit('join-chat', {
-  //     'senderId': customerId,
-  //     'receiverId': driverId,
-  //   });
-  // }
-
-
-  // void _setupSocketListeners() {
-  //   // when backend broadcasts messages
-  //   socketClient.on('receive-message', (data) {
-  //     // backend currently does: io.to(chatRoom).emit('receive-message', message);
-  //     // so `data` is just the text string
-  //     chatController.onIncomingMessage(data);
-  //   });
-
-  //   socketClient.on('user-typing', (data) {
-  //     chatController.isTyping.value = true;
-  //   });
-
-  //   socketClient.on('user-stop-typing', (data) {
-  //     chatController.isTyping.value = false;
-  //   });
-  // }
-
-
 
   // ✅ UPDATE 7: Updated _joinChatRoom to use rideId instead of senderId/receiverId
 void _joinChatRoom() {
