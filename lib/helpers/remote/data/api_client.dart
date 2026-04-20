@@ -43,11 +43,11 @@ class ApiClient extends GetxService {
   }
 
   void updateHeader(String token) {
-    Map<String, String> header = {
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
+    // Map<String, String> header = {
+    //   'Content-Type': 'application/json; charset=UTF-8',
+    //   'Accept': 'application/json',
+    //   'Authorization': 'Bearer $token',
+    // };
 
     print(
       'User Token ${token.toString()} ================================== from api Client ',
@@ -57,7 +57,6 @@ class ApiClient extends GetxService {
     print('New header: from api client : _token || updateedToken : $_accessToken');
   }
 
-
   Future<Response> getData(
     String uri, {
     Map<String, dynamic>? query,
@@ -65,7 +64,6 @@ class ApiClient extends GetxService {
   }) async {
     try {
       if (kDebugMode) {
-       // log('====> API Call: $uri\nHeader: $getHeader()');
         debugPrint('====> API Call: $uri\nHeader: $getHeader()');
       }
       http.Response response = await http

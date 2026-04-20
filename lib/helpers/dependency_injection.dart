@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:rideztohealth/feature/map/controllers/locaion_controller.dart';
 import 'package:rideztohealth/feature/map/repository/location_repository.dart';
 import 'package:rideztohealth/feature/map/service/location_service.dart';
-import 'package:rideztohealth/feature/map/service/location_service_interface.dart';
 import 'package:rideztohealth/feature/profileAndHistory/repositories/history_and_profile_repository.dart';
 import 'package:rideztohealth/feature/profileAndHistory/repositories/history_and_profile_repository_interface.dart';
 import 'package:rideztohealth/feature/profileAndHistory/services/history_and_profile_service.dart';
@@ -95,7 +94,6 @@ Future<void> initDI() async {
     prefs,
   );
   Get.lazyPut(() => locationRepositoryInterface);
-  LocationServiceInterface locationServiceInterface = Get.put<LocationServiceInterface>(LocationService(Get.find()));
   Get.lazyPut(() => localHomeServiceInterface);
   Get.lazyPut(() => LocationController());
   Get.lazyPut(() => LocationService(Get.find()));
