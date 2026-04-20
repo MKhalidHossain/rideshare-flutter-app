@@ -110,7 +110,6 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                   title: 'My Profile'.text20white(),
                 ),
-                //backgroundColor: Color(0xffB0E0CF), // light gray-blue background
                 body: Stack(
                   children: [
                     // Top background image
@@ -119,26 +118,6 @@ class _EditProfileState extends State<EditProfile> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // App bar title
-                        // Center(
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.only(top: 16),
-                        //     child: Row(
-                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //       children: [
-                        //         IconButton(
-                        //           icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-                        //           onPressed: () {
-                        //             Navigator.pop(context);
-                        //           },
-                        //         ),
-                        //         'My Profile'.text20Black(),
-                        //         Text('          '),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
-                        // Profile Section
                         Padding(
                           padding: const EdgeInsets.only(
                             top: 16,
@@ -193,26 +172,6 @@ class _EditProfileState extends State<EditProfile> {
                                               ],
                                             ),
                                             child:
-                                                // widget.userProfile.avatar != null &&
-                                                //         widget
-                                                //             .userProfile
-                                                //             .avatar!
-                                                //             .isNotEmpty
-                                                // ? Image.network(
-                                                //   widget.userProfile.avatar!,
-                                                //   width: 170,
-                                                //   height: 170,
-                                                //   fit: BoxFit.cover,
-                                                //   errorBuilder:
-                                                //       (context, error, stackTrace) =>
-                                                //           Image.asset(
-                                                //             'assets/images/person.png',
-                                                //             width: 170,
-                                                //             height: 170,
-                                                //             fit: BoxFit.cover,
-                                                //           ),
-                                                // )
-                                                //:
                                                 Container(
                                                   padding:
                                                       const EdgeInsets.all(2),
@@ -318,15 +277,6 @@ class _EditProfileState extends State<EditProfile> {
                                                       },
                                                     ),
                                                   ),
-                                                  // ClipRRect(
-                                                  //   borderRadius: BorderRadius.circular(16),
-                                                  //   child: Image.asset(
-                                                  //     'assets/images/user6.png',
-                                                  //     fit: BoxFit.cover,
-                                                  //     width: 170,
-                                                  //     height: 170,
-                                                  //   ),
-                                                  // ),
                                                 ),
                                           ),
                                           if (isEditing)

@@ -36,7 +36,6 @@ class _WalletScreenState extends State<WalletScreen> {
   double balance = 225.0;
   List<PaymentMethod> paymentMethods = [
     PaymentMethod('Stripe', 'assets/images/Stripe_Logo.png', true),
-    // PaymentMethod('Visa', 'assets/images/Stripe_Logo.png', false),
   ];
   final LocationController locationController = Get.find<LocationController>();
   late final HomeController _homeController;
@@ -64,35 +63,9 @@ class _WalletScreenState extends State<WalletScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      //  backgroundColor: Color(0xFF34495E),
-      // appBar: _buildAppBar(),
       body: _buildBody(),
     );
   }
-
-  // PreferredSizeWidget _buildAppBar() {
-  //   return AppBar(
-  //     backgroundColor: Colors.transparent,
-  //     elevation: 0,
-  //     leading: BackButton(color: Colors.white),
-  //     title: Text(
-  //       'Wallet',
-  //       style: TextStyle(
-  //         color: Colors.white,
-  //         fontSize: 18,
-  //         fontWeight: FontWeight.w600,
-  //       ),
-  //     ),
-  //     centerTitle: true,
-  //     actions: [
-  //       IconButton(
-  //         icon: Icon(Icons.more_vert, color: Colors.white),
-  //         onPressed: () => _showOptionsMenu(),
-  //       ),
-  //     ],
-  //   );
-  // }
-
   Widget _buildBody() {
     return Padding(
       padding: EdgeInsets.all(20),
@@ -224,14 +197,6 @@ class _WalletScreenState extends State<WalletScreen> {
                   Icon(Icons.add, color: Colors.white, size: 25),
                   SizedBox(width: 8),
                   'Add Money'.text18White500(),
-                  // Text(
-                  //   'Add Money',
-                  //   style: TextStyle(
-                  //     color: Colors.white,
-                  //     fontSize: 18,
-                  //     fontWeight: FontWeight.w500,
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -298,47 +263,9 @@ class _WalletScreenState extends State<WalletScreen> {
           ),
         ),
         const SizedBox(height: 20),
-
-        // Container(
-        //   width: double.infinity,
-        //   child: TextButton(
-        //     onPressed: () => _navigateToAddCard(),
-        //     style: TextButton.styleFrom(
-        //       padding: EdgeInsets.symmetric(vertical: 15),
-        //       shape: RoundedRectangleBorder(
-        //         borderRadius: BorderRadius.circular(8),
-        //         side: BorderSide(color: Colors.red),
-        //       ),
-        //     ),
-        //     child: Text(
-        //       '+ Add new card/method',
-        //       style: TextStyle(
-        //         color: Colors.red,
-        //         fontSize: 16,
-        //         fontWeight: FontWeight.w500,
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }
-
-  // void _navigateToAddFunds() {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => AddFundsScreen(
-  //         currentBalance: balance,
-  //         onFundsAdded: (amount) {
-  //           setState(() {
-  //             balance += amount;
-  //           });
-  //         },
-  //       ),
-  //     ),
-  //   );
-  // }
 
   void _navigateToAddCard() {
     Navigator.push(
@@ -347,15 +274,12 @@ class _WalletScreenState extends State<WalletScreen> {
         builder: (context) => AddCardScreen(
           onCardAdded: (cardInfo) {
             setState(() {
-              // Deselect all current payment methods
               paymentMethods = paymentMethods
                   .map(
                     (method) =>
                         PaymentMethod(method.name, method.iconPath, false),
                   )
                   .toList();
-
-              // Add the new card and make it selected
               paymentMethods.add(
                 PaymentMethod(
                   cardInfo['type'] ?? 'Unknown',

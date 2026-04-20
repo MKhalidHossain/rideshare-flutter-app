@@ -415,39 +415,6 @@ class ApiClient extends GetxService {
     }
   }
 
-  // Future<Response> postMultipartData(String uri, Map<String, String> body,  MultipartBody? profileImage, {Map<String, String>? headers}) async {
-  //   try {
-  //     if(kDebugMode) {
-  //
-  //       log('====> API Call: $appBaseUrln$uri\nHeader: $getHeader()');
-  //     }
-  //
-  //     http.MultipartRequest request = http.MultipartRequest('POST', Uri.parse("https://backend-david-weijian.onrender.com/api/v1/user/update-userProfile")
-  //     );
-  //
-  //     request.headers.addAll(headers ?? getHeader());
-  //
-  //     if(profileImage != null){
-  //       if(profileImage.file != null) {
-  //         Uint8List list = await profileImage.file!.readAsBytes();
-  //         request.files.add(http.MultipartFile(
-  //           profileImage.key, profileImage.file!.readAsBytes().asStream(), list.length,
-  //           filename: '${DateTime.now().toString()}.png',
-  //         ));
-  //       }
-  //     }
-  //
-  //     request.fields.addAll(body);
-  //
-  //     http.Response response = await http.Response.fromStream(await request.send());
-  //
-  //     return handleResponse(response, appBaseUrln+uri);
-  //   } catch (e) {
-  //     print(e.toString());
-  //     return Response(statusCode: 3000, statusText: noInternetMessage);
-  //   }
-  // }
-
   Future<Response> postMultipartDataConversation(
     String? uri,
     Map<String, String> body,

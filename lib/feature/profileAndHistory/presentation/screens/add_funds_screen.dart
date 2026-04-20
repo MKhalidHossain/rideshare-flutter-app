@@ -66,10 +66,6 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                   color: Colors.white,
                   onPressed: () => Navigator.of(context).pop(),
                 ),
-                // IconButton(
-                //   icon: Icon(Icons.arrow_back, color: Colors.white),
-                //   onPressed: () => Navigator.pop(context),
-                // ),
                 'Add Funds'.text20white(),
 
                 SizedBox(width: 50),
@@ -427,36 +423,6 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
             onPressed: () {},
             height: 51,
           ),
-          // ElevatedButton(
-          //   onPressed: _isLoading ? null : _confirmAddFunds,
-          //   style: ElevatedButton.styleFrom(
-          //     backgroundColor:
-
-          //     Color(0xffCE0000),
-          //     padding: EdgeInsets.symmetric(vertical: 15),
-          //     shape: RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(8),
-          //     ),
-          //     elevation: 2,
-          //   ),
-          //   child: _isLoading
-          //       ? SizedBox(
-          //           height: 20,
-          //           width: 20,
-          //           child: CircularProgressIndicator(
-          //             color: Colors.white,
-          //             strokeWidth: 2,
-          //           ),
-          //         )
-          //       : Text(
-          //           'Confirm',
-          //           style: TextStyle(
-          //             color: Colors.white,
-          //             fontSize: 16,
-          //             fontWeight: FontWeight.w600,
-          //           ),
-          //         ),
-          // ),
         ),
       ],
     );

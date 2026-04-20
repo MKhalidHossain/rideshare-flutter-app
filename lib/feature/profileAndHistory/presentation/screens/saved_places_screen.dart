@@ -82,8 +82,8 @@ class _SavedPlaceScreenState extends State<SavedPlaceScreen> {
                               return Column(
                                 children: [
                                   SavedPlaceSingeContainer(
-                                    title: place.name ?? 'Unknown',
-                                    subTitle: place.address ?? 'No Address',
+                                    title: place.name,
+                                    subTitle: place.address,
                                     isShowDeleteButton: true,
                                     placeId: place.id.toString(),
                                   ),
