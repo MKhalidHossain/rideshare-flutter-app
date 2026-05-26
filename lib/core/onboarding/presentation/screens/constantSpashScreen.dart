@@ -5,24 +5,20 @@ class ConstantSplashScreen extends StatelessWidget {
   const ConstantSplashScreen({super.key});
 
   @override
-  @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
 
     return AppScaffold(
       body: FittedBox(
-        child: Container(
+        child: SizedBox(
           width: size.width,
           height: size.height,
-          // color: Color(0xff101010),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              //SizedBox(height: size.height * .32),
-              Container(
+              SizedBox(
                 width: 230,
                 height: 200,
-                // height: _controller.value.size.height * 0.25,
                 child: Image.asset(
                   'assets/images/logo.png',
                   height: 200,
