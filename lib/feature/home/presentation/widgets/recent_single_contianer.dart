@@ -17,14 +17,9 @@ class SingleActivityORTripContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Breakpoint – tweak if needed
-        final bool isNarrow = constraints.maxWidth < 360;
-
-        // Left side (icon + texts)
-        Widget leftSide = Row(
+        final Widget leftSide = Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Icon bubble
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -38,20 +33,15 @@ class SingleActivityORTripContainer extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-
-            // Texts – allow them to wrap if needed
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Title (16 white 500 from your extension)
                   title.text16White500(),
                   const SizedBox(height: 2),
-                  // Subtitle
                   subTitle.text12Grey(),
                   const SizedBox(height: 2),
-                  // Price
                   price.text12Grey(),
                 ],
               ),

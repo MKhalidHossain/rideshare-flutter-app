@@ -21,38 +21,12 @@ class _RestartPasswordState extends State<ResetChangePassword> {
   final TextEditingController _repeatPasswordController =
       TextEditingController();
 
-  bool _showNewPassword = false;
-  bool _showRepeatPassword = false;
-
   final _formKey = GlobalKey<FormState>();
 
   bool get _passwordsMatch =>
       _newPasswordController.text.isNotEmpty &&
       _repeatPasswordController.text.isNotEmpty &&
       _newPasswordController.text == _repeatPasswordController.text;
-
-  InputDecoration _buildInputDecoration({
-    required String hintText,
-    required Widget suffixIcon,
-  }) {
-    return InputDecoration(
-      hintText: hintText,
-      hintStyle: TextStyle(color: AppColors.secondayText),
-      suffixIcon: suffixIcon,
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.grey.shade400),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.black, width: 1.2),
-      ),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-      filled: true,
-      fillColor: AppColors.background,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-    );
-  }
 
   void _updateState() => setState(() {});
 
@@ -67,14 +41,13 @@ class _RestartPasswordState extends State<ResetChangePassword> {
   void dispose() {
     _newPasswordController.removeListener(_updateState);
     _repeatPasswordController.removeListener(_updateState);
-    // _newPasswordController.dispose();
-    // _repeatPasswordController.dispose();
+    _newPasswordController.dispose();
+    _repeatPasswordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    const String otpVerifyType = 'password_reset';
     final size = MediaQuery.of(context).size;
     final height = size.height;
     final width = size.width;
@@ -152,7 +125,9 @@ class _RestartPasswordState extends State<ResetChangePassword> {
                                       hintText: 'New Password',
                                       hintStyle: TextStyle(
                                         fontSize: inputSize,
-                                        color: Colors.white.withOpacity(0.3),
+                                        color: Colors.white.withValues(
+                                          alpha: 0.3,
+                                        ),
                                       ),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
@@ -190,7 +165,9 @@ class _RestartPasswordState extends State<ResetChangePassword> {
                                       hintText: 'Confirm Password',
                                       hintStyle: TextStyle(
                                         fontSize: inputSize,
-                                        color: Colors.white.withOpacity(0.3),
+                                        color: Colors.white.withValues(
+                                          alpha: 0.3,
+                                        ),
                                       ),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
@@ -242,8 +219,6 @@ class _RestartPasswordState extends State<ResetChangePassword> {
 
                                     final String pass =
                                         _newPasswordController.text;
-                                    final String repPass =
-                                        _repeatPasswordController.text;
                                     authController.resetPassword(
                                       widget.userEmail,
                                       pass,

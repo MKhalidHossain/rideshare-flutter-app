@@ -4,6 +4,8 @@ import 'package:rideztohealth/feature/profileAndHistory/controllers/profile_and_
 import 'package:rideztohealth/core/widgets/shimmer/shimmer_skeleton.dart';
 
 class NotificationsScreen extends StatefulWidget {
+  const NotificationsScreen({super.key});
+
   @override
   State<NotificationsScreen> createState() => _NotificationsScreenState();
 }
@@ -87,7 +89,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             onChanged: (value) {
               setState(() => notificationsEnabled = value);
             },
-            activeColor: Colors.red,
+            activeThumbColor: Colors.red,
             activeTrackColor: Colors.white,
             inactiveThumbColor: Colors.red,
             inactiveTrackColor: Colors.black,

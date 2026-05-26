@@ -24,7 +24,6 @@ class _AppMainState extends State<AppMain> {
   String userId = '';
   final AuthController authController = Get.find<AuthController>();
 
-
   @override
   void initState() {
     _selectedIndex = 0;
@@ -41,7 +40,6 @@ class _AppMainState extends State<AppMain> {
       userId = storedUserId;
     });
     if (userId.isEmpty) {
-      print('⚠️ User ID not found in SharedPreferences');
       return;
     }
     if (socketClient.isConnected) {
@@ -54,10 +52,7 @@ class _AppMainState extends State<AppMain> {
   }
 
   void _emitJoin(String id) {
-    socketClient.emit('join-user', {
-      'userId': id, // ei key ta backend expect korche
-    });
-    print('socket join with sender id To checkkkkkkkikk : from AppMain : $id');
+    socketClient.emit('join-user', {'userId': id});
   }
 
   final List<Widget> _pages = [
