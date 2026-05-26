@@ -4,22 +4,25 @@ class PaymentMethodCard extends StatelessWidget {
   final PaymentMethod method;
   final VoidCallback onTap;
 
-  const PaymentMethodCard({Key? key, required this.method, required this.onTap})
-    : super(key: key);
+  const PaymentMethodCard({
+    super.key,
+    required this.method,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 80,
-      margin: EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 10),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
         child: Container(
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
             color: method.isSelected
-                ? Colors.red.withOpacity(0.1)
+                ? Colors.red.withValues(alpha: 0.1)
                 : Colors.white12,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
@@ -49,7 +52,7 @@ class PaymentMethodCard extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: 15),
+              const SizedBox(width: 15),
               Text(
                 method.name,
                 style: TextStyle(
@@ -60,7 +63,7 @@ class PaymentMethodCard extends StatelessWidget {
                       : FontWeight.normal,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               if (method.isSelected)
                 Icon(Icons.check_circle, color: Colors.red, size: 20),
             ],
