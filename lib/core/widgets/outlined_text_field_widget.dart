@@ -27,8 +27,9 @@ class OutlinedTextFieldWidget extends StatefulWidget {
 }
 
 class _OutlinedTextFieldWidgetState extends State<OutlinedTextFieldWidget> {
-  @override
   bool _obscureText = false;
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +43,7 @@ class _OutlinedTextFieldWidgetState extends State<OutlinedTextFieldWidget> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 7),
+        const SizedBox(height: 7),
         SizedBox(
           height: 40,
           child: TextField(
@@ -55,8 +56,8 @@ class _OutlinedTextFieldWidgetState extends State<OutlinedTextFieldWidget> {
               contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
 
               //labelText: lebel,
-              labelStyle: TextStyle(color: Colors.grey),
-              border: OutlineInputBorder(),
+              labelStyle: const TextStyle(color: Colors.grey),
+              border: const OutlineInputBorder(),
               suffixIcon:
                   widget.isObsecure
                       ? IconButton(

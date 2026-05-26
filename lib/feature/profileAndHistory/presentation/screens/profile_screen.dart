@@ -15,13 +15,16 @@ import '../../../../core/constants/app_colors.dart';
 import 'privacy_policy_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  AuthController authController = Get.find<AuthController>();
-  ProfileAndHistoryController profileController = Get.find<ProfileAndHistoryController>();
+  final AuthController authController = Get.find<AuthController>();
+  final ProfileAndHistoryController profileController =
+      Get.find<ProfileAndHistoryController>();
 
   @override
   void initState() {
@@ -152,8 +155,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     shape: BoxShape.circle,
                     gradient: LinearGradient(
                       colors: [
-                        const Color(0xffCE0000).withOpacity(0.8),
-                        const Color(0xff7B0100).withOpacity(0.8),
+                        const Color(0xffCE0000).withValues(alpha: 0.8),
+                        const Color(0xff7B0100).withValues(alpha: 0.8),
                       ],
                     ),
                   ),
@@ -279,7 +282,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Icons.delete_outline,
                   "Delete Account",
                   "Request account deletion",
-                  color: const Color(0xffCE0000).withOpacity(0.8),
+                  color: const Color(0xffCE0000).withValues(alpha: 0.8),
                   onTap: () {
                     Get.to(
                       () => DeleteAccountScreen(
@@ -294,7 +297,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Icons.logout,
                   "Log Out",
                   "Sign out of your account",
-                  color: const Color(0xffCE0000).withOpacity(0.8),
+                  color: const Color(0xffCE0000).withValues(alpha: 0.8),
                   onTap: () async {
                     await Get.find<AuthController>().logOut();
                   },
@@ -337,8 +340,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       shape: BoxShape.circle,
                       gradient: LinearGradient(
                         colors: [
-                          const Color(0xffCE0000).withOpacity(0.8),
-                          const Color(0xff7B0100).withOpacity(0.8),
+                          const Color(0xffCE0000).withValues(alpha: 0.8),
+                          const Color(0xff7B0100).withValues(alpha: 0.8),
                         ],
                       ),
                     ),
@@ -428,8 +431,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: Text(
           title,
           style: TextStyle(
-            color: color == const Color(0xffCE0000).withOpacity(0.8)
-                ? const Color(0xffCE0000).withOpacity(0.8)
+            color: color == const Color(0xffCE0000).withValues(alpha: 0.8)
+                ? const Color(0xffCE0000).withValues(alpha: 0.8)
                 : Colors.white,
             fontSize: 16,
             fontFamily: 'outfit',
